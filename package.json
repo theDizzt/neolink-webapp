@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 80",
     "lint": "next lint",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "build": "next build"
   },
   "dependencies": {
     "react": "^19.0.0",
