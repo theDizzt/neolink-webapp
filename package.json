@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev -H 0.0.0.0 -p 80",
+    "lint": "next lint",
+    "start": "react-scripts start"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -23,9 +22,5 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "@eslint/eslintrc": "^3"
-  },
-  "scripts": {
-    "dev": "next dev -H 0.0.0.0 -p 39187",
-    "lint": "next lint"
   }
 }
