@@ -1,5 +1,5 @@
 {
-  "name": "neolink-nextjs-250501",
+  "name": "neolink-webapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,12 +12,14 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "classnames": "^2.5.1",
     "lucide-react": "^0.511.0",
     "next": "15.3.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
