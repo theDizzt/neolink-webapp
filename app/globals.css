@@ -32,4 +32,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: SUITE Variable, Arial, Helvetica, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-video-title {
+  font-family: SUITE Variable;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
