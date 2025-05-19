@@ -1,5 +1,5 @@
 {
-  "name": "neolink-nextjs-250501",
+  "name": "neolink-webapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,11 +9,14 @@
     "build": "next build"
   },
   "dependencies": {
+    "classnames": "^2.5.1",
+    "lucide-react": "^0.511.0",
     "next": "15.3.1",
     "postcss": "^8.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
