@@ -1,6 +1,4 @@
-@import "tailwindcss";
-@tailwind base;
-@tailwind components;
+@import 'tailwindcss';
 @tailwind utilities;
 
 :root {
@@ -24,12 +22,16 @@
 
 @font-face {
   font-family: 'SUITE Variable';
-	font-weight: 300 900;
-	src: url('/fonts/SUITE-Variable.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  src: url('/fonts/SUITE-Variable.woff2') format('woff2-variations');
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: SUITE Variable, Arial, Helvetica, sans-serif;
+  font-family:
+    SUITE Variable,
+    Arial,
+    Helvetica,
+    sans-serif;
 }

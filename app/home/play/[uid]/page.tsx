@@ -1,9 +1,10 @@
+import { Header } from '@/components/header';
+
 // 여기 작업
 const PlayDetailPage = () => {
   return (
     <div>
-      <h1>Play Detail Page</h1>
-      <p>This is the play detail page.</p>
+      <Header />
     </div>
   );
 };
