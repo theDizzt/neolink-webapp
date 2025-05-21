@@ -4,8 +4,10 @@ import { useRef, useState, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2, FastForward } from 'lucide-react';
 import { FaBolt, FaPoll } from 'react-icons/fa';
 import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -106,17 +108,8 @@ export default function Home() {
   const handleEnded = () => {
     setIsPlaying(false);
     setIsEnded(true);
-    setCountdown(10);
-
-    countdownInterval.current = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          
-          return 10;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    setCountdown(3);
+    router.push('/home/play/[uid]/watch-end');
   };
 
   const handleMouseMove = () => {
