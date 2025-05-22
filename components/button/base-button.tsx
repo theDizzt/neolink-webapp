@@ -1,6 +1,19 @@
-export const BaseButton = ({ title }: { title: String }) => {
+import { cn } from '@/lib/utils';
+
+export const BaseButton = ({
+  title,
+  className,
+}: {
+  title: String;
+  className?: String;
+}) => {
   return (
-    <div className="shrink-0 rounded-md border border-black px-3 py-2">
+    <div
+      className={cn(
+        'flex h-10 w-20 items-center justify-center rounded-lg bg-gray-200',
+        className,
+      )}
+    >
       <p className="shrink-0 text-sm text-black">{title}</p>
     </div>
   );
