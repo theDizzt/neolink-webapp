@@ -25,9 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`h-dvh w-full ${geistSans.variable} ${geistMono.variable} flex flex-row justify-center bg-white antialiased`}
+        className={`w-full ${geistSans.variable} ${geistMono.variable} flex flex-row justify-center bg-white antialiased`}
       >
-        <div className="flex h-full w-full max-w-[800px] border border-gray-200">
+        <div className="flex h-fit w-full max-w-[800px] overflow-auto border border-gray-200">
           {children}
         </div>
       </body>

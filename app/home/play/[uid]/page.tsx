@@ -1,5 +1,8 @@
 import { BaseButton } from '@/components/button/base-button';
 import { Header } from '@/components/header';
+import { InfoTabPanel } from '@/components/play-detail/info-tab-panel';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TabsContent } from '@radix-ui/react-tabs';
 import { LocationEdit, MapPin } from 'lucide-react';
 
 // 여기 작업
@@ -33,7 +36,18 @@ const PlayDetailPage = ({ params }: { params: { uid: string } }) => {
             </p>
           </div>
         </div>
-        <BaseButton title={'라이브 중! 보러가기'} className={'w-full'} />
+        <BaseButton title={'라이브 중! 보러가기'} className={'mb-6 w-full'} />
+        <Tabs defaultValue="info" className="flew-row flex w-full">
+          <TabsList className="w-full">
+            <TabsTrigger value="info">정보</TabsTrigger>
+            <TabsTrigger value="last-play">이전회차</TabsTrigger>
+            <TabsTrigger value="behind">비하인드</TabsTrigger>
+            <TabsTrigger value="review">후기</TabsTrigger>
+          </TabsList>
+          <TabsContent value="info">
+            <InfoTabPanel />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
