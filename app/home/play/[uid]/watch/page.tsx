@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2, FastForward } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2, FastForward, Subtitles, Info } from 'lucide-react';
 import { FaBolt, FaPoll } from 'react-icons/fa';
 import classNames from 'classnames';
 import { useRouter } from 'next/navigation';
@@ -30,10 +30,34 @@ export default function Home() {
   const [showVote, setShowVote] = useState(false);
   const [showReaction, setShowReaction] = useState(false);
   const [playbackRateMenuOpen, setPlaybackRateMenuOpen] = useState(false);
+  const [showSubtitleMenu, setShowSubtitleMenu] = useState(false);
+  const [showProductInfo, setShowProductInfo] = useState(false);
   const playbackRateMenuRef = useRef(null);
   const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
   const controlTimeout = useRef(null);
   const countdownInterval = useRef(null);
+
+  const subtitleOptions = [
+    { label: '한국어', srclang: 'ko', src: '/subs/ko.vtt' },
+    { label: 'English', srclang: 'en', src: '/subs/en.vtt' },
+  ];
+
+  const sampleProducts = [
+    {
+      id: 1,
+      image: '/images/product1.jpg',
+      title: '옷',
+      price: '339,000원',
+      description: '입고있는 등장인물 정보 및 기타 정보',
+    },
+    {
+      id: 2,
+      image: '/images/product2.jpg',
+      title: '옷',
+      price: '339,000원',
+      description: '추가 상품 상세 설명',
+    },
+  ];
 
   const formatTime = (seconds) => {
     if (isNaN(seconds)) return '00:00';
@@ -41,6 +65,26 @@ export default function Home() {
     const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
     const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
     return hrs > 0 ? `${hrs}:${mins}:${secs}` : `${mins}:${secs}`;
+  };
+
+  const handleSelectSubtitle = (option: typeof subtitleOptions[0] | null) => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.querySelectorAll('track').forEach((t) => t.remove());
+    if (option) {
+      const track = document.createElement('track');
+      track.kind = 'subtitles';
+      track.label = option.label;
+      track.srclang = option.srclang;
+      track.src = option.src;
+      track.default = true;
+      video.appendChild(track);
+  
+      const [textTrack] = Array.from(video.textTracks || []);
+      if (textTrack) textTrack.mode = 'showing';
+    }
+    setShowSubtitleMenu(false);
   };
 
   const togglePlay = () => {
@@ -331,7 +375,6 @@ export default function Home() {
                       window.addEventListener('mouseup', handleMouseUp);
                     }}
                   >
-                    {/* 채운 볼륨 부분 */}
                     <div
                       className="absolute top-0 left-0 h-full rounded-full bg-purple-400 hover:bg-purple-500"
                       style={{ width: `${volume * 100}%` }}
@@ -391,6 +434,12 @@ export default function Home() {
               <button onClick={() => setShowVote(!showVote)} className="hover:text-purple-400 flex items-center gap-1">
                 <FaPoll />
               </button>
+              <button onClick={() => setShowProductInfo(true)} className="hover:text-purple-400 flex items-center gap-1">
+                <Info size={16}/>
+              </button>
+              <button onClick={() => setShowSubtitleMenu((p) => !p)} className="hover:text-purple-400 flex items-center gap-1">
+                <Subtitles size={16}/>
+              </button>
               <button onClick={handleFullscreenToggle} className="p-2 rounded-full hover:text-purple-400">
                 {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
               </button>
@@ -423,6 +472,55 @@ export default function Home() {
                 <button className="hover:scale-124 transition">😂</button>
                 <button className="hover:scale-124 transition">😢</button>
                 <button className="hover:scale-124 transition">👍</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showSubtitleMenu && (
+          <div className="absolute bottom-10 right-16 bg-black/80 text-white rounded shadow-md z-10">
+            {subtitleOptions.map((opt) => (
+              <button
+                key={opt.srclang}
+                onClick={() => handleSelectSubtitle(opt)}
+                className="block px-4 py-2 hover:bg-purple-600 w-full text-left"
+              >
+                {opt.label}
+              </button>
+            ))}
+            <button
+              onClick={() => handleSelectSubtitle(null)}
+              className="block px-4 py-2 hover:bg-purple-600 w-full text-left"
+            >
+              OFF
+            </button>
+          </div>
+        )}
+
+        {showProductInfo && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-20">
+            <div className="bg-white rounded-lg p-6 max-w-lg w-full relative">
+              <button
+                onClick={() => setShowProductInfo(false)}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl"
+              >
+                ✕
+              </button>
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                {sampleProducts.map((prod) => (
+                  <div key={prod.id} className="flex items-start gap-4">
+                    <img
+                      src={prod.image}
+                      alt={prod.title}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                    <div>
+                      <p className="font-semibold text-gray-800">{prod.title}</p>
+                      <p className="text-sm text-purple-600">{prod.price}</p>
+                      <p className="text-sm text-gray-600">{prod.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
