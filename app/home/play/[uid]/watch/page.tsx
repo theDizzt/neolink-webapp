@@ -32,6 +32,7 @@ export default function Home() {
   const [playbackRateMenuOpen, setPlaybackRateMenuOpen] = useState(false);
   const [showSubtitleMenu, setShowSubtitleMenu] = useState(false);
   const [showProductInfo, setShowProductInfo] = useState(false);
+  const [isLive, setIsLive] = useState(true);
   const playbackRateMenuRef = useRef(null);
   const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
   const controlTimeout = useRef(null);
@@ -185,6 +186,28 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return
+
+    if (isLive) {
+      vid.muted = true
+      vid.defaultMuted = true
+      vid.playsInline = true
+      vid.autoplay = true
+      vid.preload = 'auto'
+      vid.play()
+        .then(() => {
+          vid.muted = false
+          setIsPlaying(true)
+          console.log('▶LIVE autoplay 성공, 소리 ON')
+        })
+        .catch(err => {
+          console.warn('LIVE autoplay 실패:', err)
+        })
+    }
+  }, [isLive])
+
+  useEffect(() => {
     const video = videoRef.current;
     if (video && !isNaN(video.duration)) {
       video.volume = volume;
@@ -285,6 +308,20 @@ export default function Home() {
 
         <div
           className={classNames(
+            'absolute top-2 left-2 px-2 py-1 rounded text-xs font-semibold transition-opacity duration-300',
+            {
+              'bg-red-600 text-white': isLive,
+              'bg-gray-600 text-white': !isLive,
+              'opacity-100': showControls,
+              'opacity-0': !showControls,
+            }
+          )}
+        >
+          {isLive ? 'LIVE' : '녹화본'}
+        </div>
+
+        <div
+          className={classNames(
             'absolute bottom-0 left-0 right-0 px-4 pt-4 pb-2 transition-opacity duration-300 bg-gradient-to-t from-black/80 to-transparent text-white',
             {
               'opacity-100': showControls,
@@ -292,56 +329,60 @@ export default function Home() {
             }
           )}
         >
-        <div className="flex flex-col gap-2 w-full">
-          <div
-            className="relative w-full h-2 rounded-full bg-white/20 cursor-pointer"
-            onMouseDown={(e) => {
-              const bar = e.currentTarget;
-              const rect = bar.getBoundingClientRect();
-
-              const updatePosition = (clientX) => {
-                const clickX = Math.min(Math.max(clientX - rect.left, 0), rect.width);
-                const newProgress = (clickX / rect.width) * 100;
-                const video = videoRef.current;
-                if (video && video.duration) {
-                  const newTime = (newProgress / 100) * video.duration;
-                  video.currentTime = newTime;
-                  setProgress(newProgress);
-                  setCurrentTime(newTime);
-                }
-              };
-
-              const handleMouseMove = (moveEvent) => {
-                updatePosition(moveEvent.clientX);
-              };
-
-              const handleMouseUp = (upEvent) => {
-                updatePosition(upEvent.clientX);
-                window.removeEventListener('mousemove', handleMouseMove);
-                window.removeEventListener('mouseup', handleMouseUp);
-              };
-
-              window.addEventListener('mousemove', handleMouseMove);
-              window.addEventListener('mouseup', handleMouseUp);
-            }}
-          >
+        {!isLive && (
+          <div className="flex flex-col gap-2 w-full">
             <div
-              className="absolute top-0 left-0 h-full rounded-full bg-purple-400 hover:bg-purple-500"
-              style={{ width: `${progress}%` }}
-            />
+              className="relative w-full h-2 rounded-full bg-white/20 cursor-pointer"
+              onMouseDown={(e) => {
+                const bar = e.currentTarget;
+                const rect = bar.getBoundingClientRect();
 
-            <div
-              className="absolute -top-1 w-4 h-4 bg-purple-400 rounded-full shadow-md transform -translate-x-1/2 hover:bg-purple-500"
-              style={{ left: `${progress}%` }}
-            />
+                const updatePosition = (clientX) => {
+                  const clickX = Math.min(Math.max(clientX - rect.left, 0), rect.width);
+                  const newProgress = (clickX / rect.width) * 100;
+                  const video = videoRef.current;
+                  if (video && video.duration) {
+                    const newTime = (newProgress / 100) * video.duration;
+                    video.currentTime = newTime;
+                    setProgress(newProgress);
+                    setCurrentTime(newTime);
+                  }
+                };
+
+                const handleMouseMove = (moveEvent) => {
+                  updatePosition(moveEvent.clientX);
+                };
+
+                const handleMouseUp = (upEvent) => {
+                  updatePosition(upEvent.clientX);
+                  window.removeEventListener('mousemove', handleMouseMove);
+                  window.removeEventListener('mouseup', handleMouseUp);
+                };
+
+                window.addEventListener('mousemove', handleMouseMove);
+                window.addEventListener('mouseup', handleMouseUp);
+              }}
+            >
+              <div
+                className="absolute top-0 left-0 h-full rounded-full bg-purple-400 hover:bg-purple-500"
+                style={{ width: `${progress}%` }}
+              />
+
+              <div
+                className="absolute -top-1 w-4 h-4 bg-purple-400 rounded-full shadow-md transform -translate-x-1/2 hover:bg-purple-500"
+                style={{ left: `${progress}%` }}
+              />
+            </div>
+            <div className="h-0.5" />
           </div>
-          <div className="h-0.5" />
-        </div>
+        )}
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center gap-4">
-              <button onClick={togglePlay} className="bg-purple-400 hover:bg-purple-500 p-2 rounded-full">
-                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-              </button>
+              {!isLive && (
+                <button onClick={togglePlay} className="bg-purple-400 hover:bg-purple-500 p-2 rounded-full">
+                  {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                </button>
+              )}
               <div
                 className="relative flex items-center gap-2 hover:text-purple-400"
                 onMouseEnter={() => setShowVolumeBar(true)}
@@ -395,9 +436,12 @@ export default function Home() {
                 )}
               </div>
               <span className="text-xs cursor-pointer text-video-time" onClick={toggleTimeDisplay}>
-                {showRemaining
-                  ? `-${formatTime(duration - currentTime)} / ${formatTime(duration)}`
-                  : `${formatTime(currentTime)} / ${formatTime(duration)}`}
+                {isLive
+                  ? `${formatTime(currentTime)}`
+                  : showRemaining
+                    ? `-${formatTime(duration - currentTime)} / ${formatTime(duration)}`
+                    : `${formatTime(currentTime)} / ${formatTime(duration)}`
+                }
               </span>
             </div>
             <div className="flex items-center gap-4">
