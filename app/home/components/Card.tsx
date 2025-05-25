@@ -13,11 +13,12 @@ export default function Card({ title, rating, image }: CardProps) {
           alt={title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute bottom-0 left-0 w-full bg-[#1E1B2E]/18 backdrop-blur-sm px-3 py-4">
-          <p className="text-[28px] font-extrabold text-[#E0E3FF] truncate ml-4">{title}</p>
-          <p className="flex items-center text-[20px] ml-4">
-            <img src="/images/star.png" alt="별" className="mr-1" />
-            <span className="text-[#E0E3FF] mt-1">{rating.toFixed(1)}</span>
+        {/* 하단 블러 오버레이 */}
+        <div className="absolute bottom-0 left-0 w-full bg-[#1E1B2E]/30 backdrop-blur-sm px-3 py-4">
+          <p className="text-[28px] font-medium text-[#E0E3FF] truncate ml-1">{title}</p>
+          <p className="flex items-center text-[20px] ml-1 mt-1">
+            <img src="/images/star.png" alt="별" className="w-[20px] h-[20px] mr-1" />
+            <span className="text-[#E0E3FF]">{rating.toFixed(1)}</span>
           </p>
         </div>
       </div>

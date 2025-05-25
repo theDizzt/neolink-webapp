@@ -6,8 +6,8 @@ export default function Banner() {
         <p className="text-[20px] mb-1">일상을 그리는 여러 색의 현실들</p>
         <h2 className="text-[36px] font-black leading-tight mt-2">2025 하현상 팬미팅</h2>
         <p className="text-[20px] mt-2">3.24 (월) 20:00 티켓 오픈</p>
-        <button className="mt-4 px-4 py-2 bg-white text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
-          티켓 예약하기
+        <button className="mt-4 px-4 py-2 rounded-md border border-[#A38BB1] text-[#A38BB1] text-[12px] font-bold shadow-[0_0_4px_1px_#A38BB1] hover:bg-[#A38BB1]/20 transition">
+          티켓 예매하기
         </button>
       </div>
 
