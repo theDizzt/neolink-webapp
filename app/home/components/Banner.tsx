@@ -1,6 +1,6 @@
 export default function Banner() {
   return (
-    <div className="relative bg-purple-700 rounded-xl p-6 mt-4">
+    <div className="text-[#A38BB1] shadow box-shadow-color-purple relative rounded-xl p-6 mt-4">
       <div>
         <p className="text-sm">일상을 그리는 여러 색의 현실들</p>
         <h2 className="text-2xl font-bold">2025 하현상 팬미팅</h2>
