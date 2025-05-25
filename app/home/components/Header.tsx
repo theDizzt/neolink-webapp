@@ -7,7 +7,7 @@ export default function Header() {
         <a href="#">찜한 작품</a>
         <a href="#">기타</a>
       </nav>
-      <button className="text-sm">로그인</button>
+      <button className="text-sm text-[#A38BB1]">로그인</button>
     </header>
   );
 }

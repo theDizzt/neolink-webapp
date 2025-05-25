@@ -6,21 +6,19 @@ interface CardProps {
 
 export default function Card({ title, rating, image }: CardProps) {
   return (
-    <div className="shadow-purple-card rounded-xl overflow-hidden w-[160px]">
-      <div className="relative h-[240px]">
+    <div className="w-[240px] mx-auto rounded-[8px] overflow-hidden shadow-[2px_2px_2px_2px_rgba(99,98,158,0.5),_0_0_5px_#63629E]">
+      <div className="relative h-[320px]">
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover"
         />
-        {/* 텍스트 오버레이 */}
-        <div className="absolute bottom-0 left-0 w-full bg-[#1a1a2a]/30 backdrop-blur px-3 py-2">
-          <p className="text-sm font-semibold text-[#E0E3FF]">{title}</p>
-          <p className="text-sm">
-            <span className="text-[#63629e] text-lg font-bold">★</span>
-            <span className="text-[#E0E3FF] text-xs ml-1">{rating.toFixed(1)}</span>
+        <div className="absolute bottom-0 left-0 w-full bg-[#1E1B2E]/18 backdrop-blur-sm px-3 py-4">
+          <p className="text-[28px] font-semibold text-[#E0E3FF] truncate ml-4">{title}</p>
+          <p className="flex items-center text-[20px] ml-4">
+            <img src="/images/star.png" alt="별" className="w-4 h-4 mr-1" />
+            <span className="text-[#E0E3FF]">{rating.toFixed(1)}</span>
           </p>
-
         </div>
       </div>
     </div>
