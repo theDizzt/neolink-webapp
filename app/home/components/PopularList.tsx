@@ -11,8 +11,8 @@ export default function PopularList() {
     <section className="mt-6">
       {/* 현재 위치 */}
       <div className="text-[24px] ml-2 mb-2">
-        <span className="text-[#E0E3FF]">현재 위치 : </span>
-        <span className="text-[#A38BB1] font-medium">대학로 &gt;</span>
+        <span className="text-[#A38BB1]">현재 위치 : </span>
+        <span className="text-[#E0E3FF]">대학로 &gt;</span>
       </div>
 
       {/* 제목 + 아이콘 */}
