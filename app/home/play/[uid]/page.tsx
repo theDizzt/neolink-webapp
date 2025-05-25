@@ -1,7 +1,9 @@
 import { BaseButton } from '@/components/button/base-button';
 import { Header } from '@/components/header';
+import { BehindTabPanel } from '@/components/play-detail/behind-tab-panel';
 import { InfoTabPanel } from '@/components/play-detail/info-tab-panel';
 import { LastPlayPanel } from '@/components/play-detail/last-play-panel';
+import { ReviewTabPanel } from '@/components/play-detail/review-tab-panel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { LocationEdit, MapPin } from 'lucide-react';
@@ -50,6 +52,12 @@ const PlayDetailPage = ({ params }: { params: { uid: string } }) => {
           </TabsContent>
           <TabsContent value="last-play">
             <LastPlayPanel />
+          </TabsContent>
+          <TabsContent value="behind">
+            <BehindTabPanel />
+          </TabsContent>
+          <TabsContent value="review">
+            <ReviewTabPanel />
           </TabsContent>
         </Tabs>
       </div>
