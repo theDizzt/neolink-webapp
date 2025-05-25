@@ -12,7 +12,7 @@ const inter = Inter({
 
 export default function HomePage() {
   return (
-    <main className={`${inter.className} bg-[#130033] min-h-screen text-white px-4 pb-10`}>
+    <main className="h-[1886px] w-[1280px] mx-auto bg-[url('/images/background.png')] bg-cover bg-center min-h-screen">
       <div className="w-[800px] mx-auto">
         <Header />
         <Banner />
