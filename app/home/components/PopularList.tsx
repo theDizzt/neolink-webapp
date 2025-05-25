@@ -16,7 +16,7 @@ export default function PopularList() {
       </div>
 
       {/* 제목 + 아이콘 */}
-      <h3 className="text-[27px] font-bold mb-4 text-[#E0E3FF] ml-2 flex items-center">
+      <h3 className="text-[27px] font-normal mb-4 text-[#E0E3FF] ml-2 flex items-center">
         <img src="/images/crown.png" alt="crown" className="mr-2" />
         인기 작품
       </h3>
