@@ -1,3 +1,4 @@
+'use client';
 import { BaseButton } from '@/components/button/base-button';
 import { Header } from '@/components/header';
 import { BehindTabPanel } from '@/components/play-detail/behind-tab-panel';
@@ -6,16 +7,20 @@ import { LastPlayPanel } from '@/components/play-detail/last-play-panel';
 import { ReviewTabPanel } from '@/components/play-detail/review-tab-panel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
-import { LocationEdit, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { useRouter } from 'next/router';
 
 // 여기 작업
-const PlayDetailPage = ({ params }: { params: { uid: string } }) => {
+const PlayDetailPage = () => {
+  const router = useRouter();
+  const uid = router.query.uid;
+
   return (
     <div className="flex h-dvh w-full flex-col">
       <Header />
       <div className="w-full px-4">
         <div className="mb-3 flex flex-row justify-start">
-          <p className="text-2xl">{params.uid}</p>
+          <p className="text-2xl">{uid}</p>
         </div>
         <div className="mb-4 flex w-full flex-row">
           <div className="mr-6 flex aspect-[240/320] w-[240px] bg-amber-200" />
@@ -64,4 +69,5 @@ const PlayDetailPage = ({ params }: { params: { uid: string } }) => {
     </div>
   );
 };
+
 export default PlayDetailPage;

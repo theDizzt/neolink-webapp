@@ -4,8 +4,8 @@ export const BaseButton = ({
   title,
   className,
 }: {
-  title: String;
-  className?: String;
+  title: string;
+  className?: string;
 }) => {
   return (
     <div
