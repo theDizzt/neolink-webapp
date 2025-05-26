@@ -1,4 +1,5 @@
 'use client';
+
 import { BaseButton } from '@/components/button/base-button';
 import { Header } from '@/components/header';
 import { BehindTabPanel } from '@/components/play-detail/behind-tab-panel';
@@ -8,12 +9,12 @@ import { ReviewTabPanel } from '@/components/play-detail/review-tab-panel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { MapPin } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 // 여기 작업
 const PlayDetailPage = () => {
-  const router = useRouter();
-  const uid = router.query.uid;
+  const searchParams = useSearchParams();
+  const uid = searchParams.get('uid') || '';
 
   return (
     <div className="flex h-dvh w-full flex-col">
