@@ -1,23 +1,37 @@
-import { ChevronLeft } from 'lucide-react';
-import { BaseButton } from './button/base-button';
+import { Poppins } from 'next/font/google';
 
-export const Header = ({
-  hasBackButton = false,
-}: {
-  hasBackButton?: boolean;
-}) => {
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['600'],
+  display: 'swap',
+});
+
+export const Header = () => {
   return (
-    <div className="flex flex-row items-center justify-between bg-white p-4">
-      {hasBackButton && <ChevronLeft className="h-6 w-6" />}
-      {!hasBackButton && (
-        <div className="flex flex-row gap-3">
-          <p className="text-center text-lg text-black md:text-2xl">NeoLink</p>
-          <BaseButton title="홈" />
-          <BaseButton title="찜한 작품" />
-          <BaseButton title="기타" />
-        </div>
-      )}
-      <BaseButton title="로그인" />
-    </div>
+    <header className="flex items-center justify-between px-6 py-4">
+      <div className="flex w-[461px] items-center gap-16">
+        {/* NEOLINK만 Poppins */}
+        <h1
+          className={`${poppins.className} bg-gradient-to-l from-[#835E92] to-[#4F398E] bg-clip-text text-[36px] font-semibold text-transparent`}
+        >
+          NEOLINK
+        </h1>
+
+        {/* 메뉴는 기존 Inter 또는 기본 폰트 */}
+        <a href="#" className="text-[16px] text-[#E0E3FF]">
+          홈
+        </a>
+        <a href="#" className="text-[16px] text-[#E0E3FF]">
+          찜한 작품
+        </a>
+        <a href="#" className="text-[16px] text-[#E0E3FF]">
+          기타
+        </a>
+      </div>
+
+      <button className="text-sm text-[#A38BB1] transition hover:text-[#E0E3FF]">
+        로그인
+      </button>
+    </header>
   );
 };
