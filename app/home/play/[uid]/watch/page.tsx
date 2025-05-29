@@ -1,15 +1,19 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2, FastForward, Subtitles, Info } from 'lucide-react';
-import { FaBolt, FaPoll } from 'react-icons/fa';
+import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2, FastForward, Subtitles, Info, Smile, Vote, Video } from 'lucide-react';
 import classNames from 'classnames';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  // 페이지 자동 이동을 위한 라우터
   const router = useRouter();
+
+  // 비디오 참조 및 영역
   const videoRef = useRef(null);
   const containerRef = useRef(null);
+
+  // 비디오 재생 제어
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -24,25 +28,43 @@ export default function Home() {
   const [videoSrc, setVideoSrc] = useState('/test/sample.mp4');
   const [showControls, setShowControls] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+
+  // 재생 제어바 숨김처리
   const [showTitle, setShowTitle] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
+
+  // 라이브 인터렉션
   const [showVote, setShowVote] = useState(false);
   const [showReaction, setShowReaction] = useState(false);
   const [playbackRateMenuOpen, setPlaybackRateMenuOpen] = useState(false);
   const [showSubtitleMenu, setShowSubtitleMenu] = useState(false);
   const [showProductInfo, setShowProductInfo] = useState(false);
+
+  // 투표 기능 변수
+  const [votes, setVotes] = useState({ A: 0, B: 0 });
+  const totalVotes = votes.A + votes.B;
+  const percentA = totalVotes === 0 ? 0 : Math.round((votes.A / totalVotes) * 100);
+  const percentB = 100 - percentA;
+  const [currentVote, setCurrentVote] = useState(null);
+  const [voteIndex, setVoteIndex] = useState(0);
+  const [countdown, setCountdown] = useState(15);
+  const [showResult, setShowResult] = useState(false);
+
+  // 라이브 여부
   const [isLive, setIsLive] = useState(true);
+
+  //재생속도 제어
   const playbackRateMenuRef = useRef(null);
   const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
   const controlTimeout = useRef(null);
-  const countdownInterval = useRef(null);
 
+  // 자막 옵션
   const subtitleOptions = [
     { label: '한국어', srclang: 'ko', src: '/subs/ko.vtt' },
     { label: 'English', srclang: 'en', src: '/subs/en.vtt' },
   ];
 
+  // 상품 목록
   const sampleProducts = [
     {
       id: 1,
@@ -60,6 +82,26 @@ export default function Home() {
     },
   ];
 
+  // 투표 목록
+  const votingData = [
+    {
+      time: 65,
+      question: '점순네 닭을 후려칠까?',
+      options: ['후려친다', '다시 생각해본다'],
+    },
+    {
+      time: 101,
+      question: '이때 주인공은 어떤 행동을 할까?',
+      options: ['참는다', '맞서 싸운다'],
+    },
+    {
+      time: 201,
+      question: '이때 투입될 등장 인물은 누구일까?',
+      options: ['점순이네 어머니', '까치'],
+    },
+  ];
+
+  // 재생 시간 반환 ([h]:mm:ss)
   const formatTime = (seconds) => {
     if (isNaN(seconds)) return '00:00';
     const hrs = Math.floor(seconds / 3600);
@@ -68,6 +110,7 @@ export default function Home() {
     return hrs > 0 ? `${hrs}:${mins}:${secs}` : `${mins}:${secs}`;
   };
 
+  // 자막 기능
   const handleSelectSubtitle = (option: typeof subtitleOptions[0] | null) => {
     const video = videoRef.current;
     if (!video) return;
@@ -88,6 +131,7 @@ export default function Home() {
     setShowSubtitleMenu(false);
   };
 
+  // 동영상 재생 기능
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -111,6 +155,7 @@ export default function Home() {
     }
   };
 
+  // 음소거 기능
   const toggleMute = () => {
     if (isMuted || volume === 0) {
       setVolume(prevVolume);
@@ -122,10 +167,12 @@ export default function Home() {
     }
   };
 
+  // 동영상 재생 시간과 남은 기간을 전환하는 기능
   const toggleTimeDisplay = () => {
     setShowRemaining(!showRemaining);
   };
 
+  // 동영상 재생 시간 실시간 업데이트
   const handleTimeUpdate = () => {
     const video = videoRef.current;
     if (video && video.duration) {
@@ -134,6 +181,7 @@ export default function Home() {
     }
   };
 
+  // 동영상 메타데이터 읽기
   const handleLoadedMetadata = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -150,6 +198,7 @@ export default function Home() {
     }
   };
 
+  // 동영상 재생 완료 후 이벤트
   const handleEnded = () => {
     setIsPlaying(false);
     setIsEnded(true);
@@ -157,6 +206,7 @@ export default function Home() {
     router.push('/home/play/[uid]/watch-end');
   };
 
+  // 마우스 커서 동작 이벤트
   const handleMouseMove = () => {
     setShowControls(true);
     setShowTitle(true);
@@ -167,11 +217,13 @@ export default function Home() {
     }, 3000);
   };
 
+  // 재생 제어 메뉴 더블 클릭 시 즉시 숨기기
   const handleDoubleClick = () => {
     setShowControls((prev) => !prev);
     setShowTitle((prev) => !prev);
   };
 
+  // 전체화면 모드
   const handleFullscreenToggle = () => {
     if (!document.fullscreenElement) {
       containerRef.current?.requestFullscreen();
@@ -185,6 +237,9 @@ export default function Home() {
     handleMouseMove();
   };
 
+  // 투표 조작 함수
+
+  // 라이브 자동 재생 기능
   useEffect(() => {
     const vid = videoRef.current;
     if (!vid) return
@@ -207,6 +262,7 @@ export default function Home() {
     }
   }, [isLive])
 
+  // 동영상 배속 설정
   useEffect(() => {
     const video = videoRef.current;
     if (video && !isNaN(video.duration)) {
@@ -215,6 +271,7 @@ export default function Home() {
     }
   }, [volume, playbackRate]);
 
+  // 단축키 설정
   useEffect(() => {
     const handleKeyDown = (e) => {
       const video = videoRef.current;
@@ -264,6 +321,7 @@ export default function Home() {
     };
   }, []);
 
+  // 동영상 길이 반환
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -285,7 +343,49 @@ export default function Home() {
     };
   }, [videoSrc]);
 
-  
+  // 특정 시간에 투표 자동으로 띄우기
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const checkTime = () => {
+      if (voteIndex < votingData.length && Math.floor(video.currentTime) === votingData[voteIndex].time) {
+        video.pause();
+        setCurrentVote(votingData[voteIndex]);
+        setShowVote(true);
+        setCountdown(15);
+        setVotes({ A: 0, B: 0 });
+        setVoteIndex((prev) => prev + 1);
+      }
+    };
+
+    const interval = setInterval(checkTime, 500);
+    return () => clearInterval(interval);
+  }, [voteIndex]);
+
+  // 투표 결과 띄우기
+  useEffect(() => {
+    if (showVote && countdown > 0) {
+      const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+
+    if (showVote && countdown === 0) {
+      setShowResult(true);
+      setTimeout(() => {
+        setShowVote(false);
+        setShowResult(false);
+        videoRef.current?.play();
+      }, 5000);
+    }
+  }, [countdown, showVote]);
+
+  const handleVote = (option) => {
+    setVotes((prev) => ({
+      ...prev,
+      [option === 'A' ? 'A' : 'B']: prev[option === 'A' ? 'A' : 'B'] + 1,
+    }));
+  };
 
   return (
     <main className="flex flex-col items-center justify-start min-h-screen bg-black text-purple-200 p-6">
@@ -308,18 +408,30 @@ export default function Home() {
 
         <div
           className={classNames(
-            'absolute top-2 left-2 px-2 py-1 rounded text-xs font-semibold transition-opacity duration-300',
+            'flex justify-between gap-4 w-full absolute top-2 left-2 px-3 py-1 text-xs font-semibold transition-opacity duration-300',
             {
-              'bg-red-600 text-white': isLive,
-              'bg-gray-600 text-white': !isLive,
               'opacity-100': showControls,
               'opacity-0': !showControls,
             }
           )}
         >
-          {isLive ? 'LIVE' : '녹화본'}
+          <div>
+            <span className="inline-flex items-center">
+              <Video className={classNames("mr-1 align-middle",
+                {
+                  'text-red-600': isLive,
+                  'text-white-600': !isLive
+                }
+                )} size={24} />
+              <span className="align-middle text-white text-lg">{isLive ? '실시간' : '녹화본'}</span>
+            </span>
+          </div>
+          <div>
+            <button onClick={() => setShowProductInfo(true)} className="hover:text-purple-400 flex items-center gap-1">
+                <span className="text-lg">여기를 눌러 정보를 확인해 보세요 </span><span><Info size={22}/></span>
+            </button>
+          </div>
         </div>
-
         <div
           className={classNames(
             'absolute bottom-0 left-0 right-0 px-4 pt-4 pb-2 transition-opacity duration-300 bg-gradient-to-t from-black/80 to-transparent text-white',
@@ -445,44 +557,43 @@ export default function Home() {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <div className="relative" ref={playbackRateMenuRef}>
-                <button
-                  onClick={() => setPlaybackRateMenuOpen((prev) => !prev)}
-                  className="flex items-center gap-1 text-white px-2 py-1 rounded hover:text-purple-400"
-                >
-                  <FastForward size={18} />
-                  {playbackRate}x
-                </button>
-                {playbackRateMenuOpen && (
-                  <div className="absolute bottom-full mb-1 left-0 bg-black/45 text-white rounded shadow-md z-10">
-                    {playbackRates.map((rate) => (
-                      <button
-                        key={rate}
-                        onClick={() => {
-                          setPlaybackRate(rate);
-                          setPlaybackRateMenuOpen(false);
-                        }}
-                        className={`block w-full text-left px-3 py-1 hover:bg-purple-800/45 rounded shadow-md z-10 ${
-                          playbackRate === rate ? 'bg-purple-700/45 font-bold rounded shadow-md z-10' : ''
-                        }`}
-                      >
-                        {rate}x
-                      </button>
-                    ))}
-                  </div>
+              {!isLive && (
+                <div className="relative" ref={playbackRateMenuRef}>
+                  <button
+                    onClick={() => setPlaybackRateMenuOpen((prev) => !prev)}
+                    className="flex items-center gap-1 text-white px-2 py-1 rounded hover:text-purple-400"
+                  >
+                    <FastForward size={18} />
+                    {playbackRate}x
+                  </button>
+                  {playbackRateMenuOpen && (
+                    <div className="absolute bottom-full mb-1 left-0 bg-black/45 text-white rounded shadow-md z-10">
+                      {playbackRates.map((rate) => (
+                        <button
+                          key={rate}
+                          onClick={() => {
+                            setPlaybackRate(rate);
+                            setPlaybackRateMenuOpen(false);
+                          }}
+                          className={`block w-full text-left px-3 py-1 hover:bg-purple-800/45 rounded shadow-md z-10 ${
+                            playbackRate === rate ? 'bg-purple-700/45 font-bold rounded shadow-md z-10' : ''
+                          }`}
+                        >
+                          {rate}x
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 )}
-              </div>
               <button onClick={() => setShowReaction(!showReaction)} className="hover:text-purple-400 flex items-center gap-1">
-                <FaBolt />
+                <Smile />
               </button>
               <button onClick={() => setShowVote(!showVote)} className="hover:text-purple-400 flex items-center gap-1">
-                <FaPoll />
-              </button>
-              <button onClick={() => setShowProductInfo(true)} className="hover:text-purple-400 flex items-center gap-1">
-                <Info size={16}/>
+                <Vote />
               </button>
               <button onClick={() => setShowSubtitleMenu((p) => !p)} className="hover:text-purple-400 flex items-center gap-1">
-                <Subtitles size={16}/>
+                <Subtitles size={20}/>
               </button>
               <button onClick={handleFullscreenToggle} className="p-2 rounded-full hover:text-purple-400">
                 {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
@@ -491,16 +602,54 @@ export default function Home() {
           </div>
         </div>
 
-        {showVote && (
-          <div className="absolute bottom-24 w-full px-4 flex justify-center">
-            <div className="bg-[#e5e5ff] p-4 rounded-xl shadow-md w-full max-w-2xl text-center text-black">
-              <p className="mb-4 font-semibold">연극 내용.. 다음 상황을 어떻게 풀어나가면 좋을까?!<br/>향유자님이 직접 골라주세요!</p>
-              <div className="grid grid-cols-2 gap-4">
-                {['선택지 A', '선택지 B', '선택지 C', '선택지 D'].map((option, index) => (
-                  <button key={index} className="bg-white rounded-lg py-2 hover:bg-blue-100 transition">
-                    {option}
-                  </button>
-                ))}
+        {showVote && currentVote && (
+          <div className="absolute bottom-20 w-full px-4 flex flex-col items-center space-y-4">
+            {/* 버튼 */}
+            <div className="flex space-x-4">
+              {currentVote.options.map((option, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleVote(i === 0 ? 'A' : 'B')}
+                  className="w-55 px-6 py-2 bg-purple-600 rounded text-white font-semibold hover:bg-purple-700"
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+
+            {/* 질문 */}
+            <div className="bg-[#d6c9f0] w-120 py-4 rounded-xl shadow-md text-center text-black text-lg font-semibold max-w-md w-full">
+              {currentVote.question}
+              <p className="text-sm">{countdown}초 남음</p>
+            </div>
+
+            <div className="absolute bottom-4 right-4 text-xs text-white bg-black/60 w-56 px-3 py-2 rounded-lg shadow-lg space-y-1">
+              <p className="text-center font-semibold text-lg">투표 결과</p>
+              <p>현재 {totalVotes} 명이 투표에 참여함!</p>
+
+              <div className="flex justify-between text-lg font-bold mb-1">
+                <span className="text-red-400">{percentA}%</span>
+                <span className="text-sky-500">{percentB}%</span>
+              </div>
+              <div className="w-full h-6 bg-gray-200 rounded overflow-hidden flex border border-white">
+                <div
+                  className="bg-red-400 transition-all duration-500"
+                  style={{ width: `${percentA}%` }}
+                />
+                <div
+                  className="bg-sky-500 transition-all duration-500"
+                  style={{ width: `${percentB}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs font-bold mb-1">
+                <span className="text-red-400">
+                  <p>후려친다</p>
+                  <p>{votes.A}표</p>
+                </span>
+                <span className="text-sky-500 text-right">
+                  <p>다시 생각한다</p>
+                  <p>{votes.B}표</p>
+                </span>
               </div>
             </div>
           </div>
