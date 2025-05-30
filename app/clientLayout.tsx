@@ -13,7 +13,11 @@ export default function ClientLayout({
     pathname.startsWith('/home/play/') && pathname.endsWith('/watch');
 
   if (isWatch) {
-    return <>{children}</>;
+    return (
+      <div className="w-screen h-screen bg-black">
+        {children}
+      </div>
+    );
   }
 
   return (
