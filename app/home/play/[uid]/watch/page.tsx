@@ -25,7 +25,7 @@ export default function Home() {
   const [showRemaining, setShowRemaining] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isEnded, setIsEnded] = useState(false);
-  const [videoSrc, setVideoSrc] = useState('/test/sample.mp4');
+  const [videoSrc, setVideoSrc] = useState('/test/sample2.mp4');
   const [showControls, setShowControls] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -51,7 +51,7 @@ export default function Home() {
   const [showResult, setShowResult] = useState(false);
 
   // 라이브 여부
-  const [isLive, setIsLive] = useState(true);
+  const [isLive, setIsLive] = useState(0);
 
   //재생속도 제어
   const playbackRateMenuRef = useRef(null);
@@ -69,15 +69,43 @@ export default function Home() {
     {
       id: 1,
       image: '/images/product1.jpg',
-      title: '옷',
-      price: '339,000원',
+      title: '옷 알파',
+      price: '33,900원',
       description: '입고있는 등장인물 정보 및 기타 정보',
     },
     {
       id: 2,
-      image: '/images/product2.jpg',
-      title: '옷',
-      price: '339,000원',
+      image: '/images/product1.jpg',
+      title: '옷 베타',
+      price: '44,200원',
+      description: '추가 상품 상세 설명',
+    },
+    {
+      id: 3,
+      image: '/images/product1.jpg',
+      title: '옷 감마',
+      price: '55,500원',
+      description: '입고있는 등장인물 정보 및 기타 정보',
+    },
+    {
+      id: 4,
+      image: '/images/product1.jpg',
+      title: '옷 델타',
+      price: '61,400원',
+      description: '추가 상품 상세 설명',
+    },
+    {
+      id: 5,
+      image: '/images/product1.jpg',
+      title: '옷 엡실론',
+      price: '68,400원',
+      description: '입고있는 등장인물 정보 및 기타 정보',
+    },
+    {
+      id: 6,
+      image: '/images/product1.jpg',
+      title: '옷 제타',
+      price: '70,700원',
       description: '추가 상품 상세 설명',
     },
   ];
@@ -420,15 +448,24 @@ export default function Home() {
               <Video className={classNames("mr-1 align-middle",
                 {
                   'text-red-600': isLive,
-                  'text-white-600': !isLive
+                  'text-gray-600': !isLive
                 }
                 )} size={24} />
-              <span className="align-middle text-white text-lg">{isLive ? '실시간' : '녹화본'}</span>
+              <span className="align-middle text-white text-lg ml-1">{isLive ? '실시간' : '녹화본'}</span>
             </span>
           </div>
           <div>
-            <button onClick={() => setShowProductInfo(true)} className="hover:text-purple-400 flex items-center gap-1">
-                <span className="text-lg">여기를 눌러 정보를 확인해 보세요 </span><span><Info size={22}/></span>
+            <button
+              onClick={() => setShowProductInfo(true)}
+              className="bg-[#3d3750]/90 text-white rounded-full flex items-center space-x-2 shadow-md hover:bg-[#6c6090] transition"
+            >
+                <span className="inline-block ml-2 text-sm">여기를 눌러서 정보를 확인해 보세요</span>
+                <div
+                  className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+                >
+                  <Info size={20} />
+                </div>
+
             </button>
           </div>
         </div>
@@ -586,13 +623,22 @@ export default function Home() {
                   )}
                 </div>
                 )}
-              <button onClick={() => setShowReaction(!showReaction)} className="hover:text-purple-400 flex items-center gap-1">
-                <Smile />
+              <button
+                onClick={() => setShowReaction(!showReaction)}
+                className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+              >
+                <Smile size={20}/>
               </button>
-              <button onClick={() => setShowVote(!showVote)} className="hover:text-purple-400 flex items-center gap-1">
-                <Vote />
+              <button
+                onClick={() => setShowVote(!showVote)}
+                className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+              >
+                <Vote size={20}/>
               </button>
-              <button onClick={() => setShowSubtitleMenu((p) => !p)} className="hover:text-purple-400 flex items-center gap-1">
+              <button
+                onClick={() => setShowSubtitleMenu((p) => !p)}
+                className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+              >
                 <Subtitles size={20}/>
               </button>
               <button onClick={handleFullscreenToggle} className="p-2 rounded-full hover:text-purple-400">
@@ -604,7 +650,6 @@ export default function Home() {
 
         {showVote && currentVote && (
           <div className="absolute bottom-20 w-full px-4 flex flex-col items-center space-y-4">
-            {/* 버튼 */}
             <div className="flex space-x-4">
               {currentVote.options.map((option, i) => (
                 <button
@@ -617,7 +662,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* 질문 */}
             <div className="bg-[#d6c9f0] w-120 py-4 rounded-xl shadow-md text-center text-black text-lg font-semibold max-w-md w-full">
               {currentVote.question}
               <p className="text-sm">{countdown}초 남음</p>
@@ -643,11 +687,11 @@ export default function Home() {
               </div>
               <div className="flex justify-between text-xs font-bold mb-1">
                 <span className="text-red-400">
-                  <p>후려친다</p>
+                  <p>{currentVote.options[0]}</p>
                   <p>{votes.A}표</p>
                 </span>
                 <span className="text-sky-500 text-right">
-                  <p>다시 생각한다</p>
+                  <p>{currentVote.options[1]}</p>
                   <p>{votes.B}표</p>
                 </span>
               </div>
@@ -691,33 +735,53 @@ export default function Home() {
         )}
 
         {showProductInfo && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-20">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full relative">
+          <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center">
+            {/* 모달 영역 */}
+            <div
+              style={{
+                backgroundColor: 'rgba(46, 30, 78, 0.76)',
+                borderRadius: '1rem',
+              }}
+              className="h-[60vh] w-[70vw] text-white shadow-xl z-50 flex flex-col p-6 relative overflow-hidden"
+            >
+              {/* 닫기 버튼 */}
               <button
                 onClick={() => setShowProductInfo(false)}
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl"
+                className="absolute top-3 right-4 text-white hover:text-gray-300 text-2xl z-10"
               >
                 ✕
               </button>
-              <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+
+              {/* 스크롤 가능한 리스트 (모달 내부에 스크롤) */}
+              <div className="space-y-4 overflow-y-auto pr-2 mt-8 flex-1">
                 {sampleProducts.map((prod) => (
-                  <div key={prod.id} className="flex items-start gap-4">
-                    <img
-                      src={prod.image}
-                      alt={prod.title}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-800">{prod.title}</p>
-                      <p className="text-sm text-purple-600">{prod.price}</p>
-                      <p className="text-sm text-gray-600">{prod.description}</p>
+                  <div
+                    key={prod.id}
+                    className="flex items-center justify-between gap-4 bg-white/5 rounded-xl px-4 py-3"
+                  >
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={prod.image}
+                        alt={prod.title}
+                        className="w-24 h-24 object-cover rounded"
+                      />
+                      <div className="text-lg">
+                        <p className="font-semibold text-white">{prod.title}</p>
+                        <p className="text-purple-300">{prod.price}</p>
+                        <p className="text-gray-300">{prod.description}</p>
+                      </div>
                     </div>
+
+                    <button className="text-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white px-3 py-1 rounded-full whitespace-nowrap">
+                      옷 정보 보러가기 <span className="ml-1">▶</span>
+                    </button>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         )}
+
       </div>
     </main>
   );
