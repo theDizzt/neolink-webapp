@@ -9,10 +9,10 @@ export default function ClientLayout({
 }) {
   const pathname = usePathname();
 
-  const isWatchEnd =
+  const isWatch =
     pathname.startsWith('/home/play/') && pathname.endsWith('/watch');
 
-  if (isWatchEnd) {
+  if (isWatch) {
     return <>{children}</>;
   }
 
