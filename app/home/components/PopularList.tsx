@@ -1,5 +1,6 @@
 'use client';
 import { useRef, useCallback, useState } from 'react';
+import Link from 'next/link';
 import Card from './Card';
 import Modal from './Modal';
 
@@ -23,7 +24,7 @@ const data = [
     rating: 4.7,
     image: '/images/yongpal.png',
     modalImage: '/images/yongpal_modal.jpg',
-    description: '우리는 인생을 살아가며 수많은 사람과 인연을 맺습니다. 그 속에서 가끔 이런 고민을 합니다. \'용팔이\'를 보고 난 후, 묻고 싶습니다. 당신은 다른 사람에게 어떤 모습으로 남아 있나요?',
+    description: '우리는 인생을 살아가며 수많은 사람과 인연을 맺습니다. 그 속에서 가끔 이런 고민을 합니다. "용팔이"를 보고 난 후, 묻고 싶습니다. 당신은 다른 사람에게 어떤 모습으로 남아 있나요?',
   },
   {
     title: '결단코, 사랑',
@@ -47,6 +48,8 @@ export default function PopularList() {
   }, []);
 
   const onMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).tagName === 'BUTTON' || (e.target as HTMLElement).closest('a')) return;
+
     preventUnexpectedEffects(e.nativeEvent);
     if (!containerRef.current) return;
     setIsDragging(true);
@@ -98,9 +101,11 @@ export default function PopularList() {
           인기 작품
         </h3>
         <div className="inline-block p-[2px] rounded-full bg-gradient-to-r from-[#504584] to-[#3C184C]">
-          <button className="w-[100px] h-[32px] rounded-full bg-gradient-to-r from-[#3D366E] to-[#271743] text-[#A38BB1] text-[16px]">
-            전체 보기
-          </button>
+          <Link href="/home/category">
+            <button className="w-[100px] h-[32px] rounded-full bg-gradient-to-r from-[#3D366E] to-[#271743] text-[#A38BB1] text-[16px]">
+              전체 보기
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -110,7 +115,7 @@ export default function PopularList() {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseLeave}
-        className="overflow-x-auto no-scrollbar pr-5 pl-2 cursor-grab select-none pb-2"
+        className="overflow-x-auto no-scrollbar pr-5 pl-2 pb-4 cursor-grab select-none"
       >
         <div className="flex gap-4">
           {data.map((item, i) => (
@@ -119,11 +124,7 @@ export default function PopularList() {
               className="min-w-[220px] flex-shrink-0"
               onClick={() => handleCardClick(item)}
             >
-              <Card
-                title={item.title}
-                rating={item.rating}
-                image={item.image}
-              />
+              <Card title={item.title} rating={item.rating} image={item.image} />
             </div>
           ))}
         </div>

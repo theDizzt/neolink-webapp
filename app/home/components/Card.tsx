@@ -14,7 +14,7 @@ export default function Card({ title, rating, image }: CardProps) {
           className="w-full h-full object-cover"
         />
         {/* 하단 블러 오버레이 */}
-        <div className="absolute bottom-0 left-0 w-full bg-[#1E1B2E]/30 backdrop-blur-sm px-3 py-4">
+        <div className="absolute bottom-0 left-0 w-full bg-[#1E1B2E]/30 backdrop-blur-[3px] px-3 py-4">
           <p className="text-[28px] font-medium text-[#E0E3FF] truncate ml-1">{title}</p>
           <p className="flex items-center text-[20px] ml-1 mt-1">
             <img src="/images/star.png" alt="별" className="w-[20px] h-[20px] mr-1" />
