@@ -29,8 +29,8 @@ const data = [
     title: '결단코, 사랑',
     rating: 5.0,
     image: '/images/decisionlove.png',
-    modalImage: '/images/decisionlove_modal.png',
-    description: '불법 외과 수술로 생계를 이어가던 한 남자의 이야기...',
+    modalImage: '/images/decisionlove_modal.jpg',
+    description: '극 중 한 여인은 죽음보다 더 악몽 같았던 인생을 살면서 죽음에 안달한다. 그러나 그 여인의 곁에 영(靈)이라는 존재가 모습을 드러내 여인의 죽음을 방해하고 그의 삶에 개입하기 시작한다.',
   },
 ];
 
@@ -110,7 +110,7 @@ export default function PopularList() {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseLeave}
-        className="overflow-x-auto no-scrollbar pr-5 pl-2 cursor-grab select-none"
+        className="overflow-x-auto no-scrollbar pr-5 pl-2 cursor-grab select-none pb-2"
       >
         <div className="flex gap-4">
           {data.map((item, i) => (
