@@ -57,7 +57,7 @@ const data = [
     rating: 4.8,
     image: '/images/dongbaek.png',
     modalImage: '/images/dongbaek_modal.png',
-    description: '농촌을 배경으로 마름의 딸과 소작인 아들의 풋풋한 애정을 해학적으로 그려 낸 작품',
+    description: '농촌을 배경으로 마름의 딸과 소작인 아들의 풋풋한 애정을 해학적으로 그려 낸 작품.',
   },
   {
     title: '내일은 내일에게',
@@ -98,7 +98,7 @@ export default function CategoryPage() {
       {/* 상단 헤더 */}
       <div className="relative z-10 w-[836px] mx-auto">
         {/* ← 버튼 줄 */}
-        <div className="flex justify-start mt-[34px] ml-15 mb-2">
+        <div className="flex justify-start mt-[34px] ml-9 mb-2">
           <img
             src="/images/arrow_left.png"
             alt="back"
@@ -109,13 +109,13 @@ export default function CategoryPage() {
 
         <div className="flex items-center justify-between mb-6">
           {/* 타이틀 */}
-          <h2 className="text-[24px] text-[#EAE0FF] flex items-center mt-10 ml-4">
+          <h2 className="text-[24px] text-[#EAE0FF] flex items-center mt-10 ml-2">
             <img src="/images/crown.png" alt="crown" className="mr-2" />
             대학로 인기 작품
           </h2>
 
           {/* 추천순 + 로그인 */}
-          <div className="flex flex-col items-end gap-13 mr-2 -mt-7.5">
+          <div className="flex flex-col items-end gap-13 mr-7 -mt-7.5">
             <button className="text-[#A38BB1] text-sm mr-7">로그인</button>
             <button className="text-[#A38BB1] text-[13pt] flex items-center mr-4">
               추천순
@@ -125,7 +125,7 @@ export default function CategoryPage() {
         </div>
 
         {/* 카드 목록 */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-6 flex items-center w-[800px]">
           {data.map((item, index) => (
             <div key={index} onClick={() => setSelected(item)}>
               <Card {...item} />
@@ -135,7 +135,7 @@ export default function CategoryPage() {
       </div>
 
       {/* 페이지네이션 - Figma 디자인 기반 */}
-      <div className="absolute top-[1183px] left-[322px] w-[636px] h-[60px] flex justify-center items-center gap-12 z-10">
+      <div className="absolute top-[1183px] left-[322px] w-[636px] h-[60px] flex justify-center items-center gap-11 z-10">
         <img src="/images/first.png" alt="first"  />
         <img src="/images/prev.png" alt="prev"  />
 
