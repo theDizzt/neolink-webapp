@@ -2,6 +2,8 @@
 import { useRef, useCallback, useState } from 'react';
 import Card from './Card';
 import Modal from './Modal';
+import Link from 'next/link';
+
 
 const data = [
   {
@@ -125,9 +127,11 @@ export default function LimitedList() {
           기간 한정
         </h3>
         <div className="inline-block p-[2px] rounded-full bg-gradient-to-r from-[#504584] to-[#3C184C]">
-          <button className="w-[100px] h-[32px] rounded-full bg-gradient-to-r from-[#3D366E] to-[#271743] text-[#A38BB1] text-[16px]">
-            전체 보기
-          </button>
+          <Link href="/home/limited">
+            <button className="w-[100px] h-[32px] rounded-full bg-gradient-to-r from-[#3D366E] to-[#271743] text-[#A38BB1] text-[16px]">
+              전체 보기
+            </button>
+          </Link>
         </div>
       </div>
 
