@@ -108,7 +108,7 @@ export default function SeatBookingPage() {
                                         key={index}
                                         className={`flex-shrink-0 text-center px-[80px] py-[10px] mx-2 rounded-[40px] transition-all 
                       ${selectedDate === `${date.month} ${date.day} ${date.time}`
-                                                ? 'bg-gradient-to-tl from-[#907FC4] to-[#271743] shadow-lg scale-90 text-white border-1 border-white-300'
+                                                ? 'bg-gradient-to-tl from-[#3D366E] to-[#271743] shadow-lg scale-90 text-white border-1 border-white-300'
                                                 : 'bg-gradient-to-tl from-[#707070] to-[#D6D6D6] hover:from-[#907FC4] scale-100 hover:to-[#271743] text-gray-300'
                                             }`}
                                         onClick={() => handleDateSelect(date)}
@@ -200,7 +200,7 @@ export default function SeatBookingPage() {
                     {/* 구매 버튼 */}
                     <div className="flex justify-center">
                         <button
-                            className={`bg-gradient-to-r from-[#907FC4] to-[#271743] hover:from-purple-700 hover:to-blue-700 text-[#CEC4E4] font-bold py-4 px-12 rounded-[500px] text-lg transition-all ${selectedSeats.length === 0 ? 'opacity-50 cursor-not-allowed' : 'shadow-lg'
+                            className={`bg-gradient-to-r from-[#3D366E] to-[#271743]   hover:opacity-80 text-[#CEC4E4] font-bold py-4 px-12 rounded-[500px] text-lg transition-all ${selectedSeats.length === 0 ? 'opacity-50 cursor-not-allowed' : 'shadow-lg'
                                 }`}
                             disabled={selectedSeats.length === 0}
                         >
