@@ -35,7 +35,7 @@ export const PlayDetailCard = ({ className }: { className?: string }) => {
           </p>
         </div>
       </div>
-      <BaseButton title={'라이브 중! 보러가기'} className={'mb-6 w-full'} />
+      <BaseButton title={'▶ 라이브 중! 보러가기'} className={'mb-6 w-full'} />
     </div>
   );
 };
