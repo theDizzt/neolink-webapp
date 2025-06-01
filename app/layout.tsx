@@ -26,7 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`w-full ${geistSans.variable} ${geistMono.variable} flex flex-row justify-center bg-white antialiased`}
+        className={`h-dvh w-full ${geistSans.variable} ${geistMono.variable} flex flex-row justify-center bg-[#4D3E86] antialiased`}
+        style={{
+          backgroundImage: "url('/images/background.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
       >
         <ClientLayout>{children}</ClientLayout>
       </body>

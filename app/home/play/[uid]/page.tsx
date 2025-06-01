@@ -9,19 +9,30 @@ import { ReviewTabPanel } from '@/components/play-detail/review-tab-panel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { MapPin } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 // 여기 작업
 const PlayDetailPage = () => {
-  const searchParams = useSearchParams();
-  const uid = searchParams.get('uid') || '';
+  const searchParams = usePathname();
+  const uid = searchParams.split('/').pop() || 'Unknown Play';
 
   return (
     <div className="flex h-dvh w-full flex-col">
-      <Header />
+      <Header hasBackButton={true} />
       <div className="w-full px-4">
-        <div className="mb-3 flex flex-row justify-start">
-          <p className="text-2xl">{uid}</p>
+        <div className="mb-3 flex flex-col justify-start">
+          <p className="mb-0.5 text-2xl font-semibold text-white">{'동백꽃'}</p>
+          <div className="flex flex-row items-center justify-start">
+            <p className="text-sm text-white">2025</p>
+            <Image
+              src="/images/age-12.png"
+              alt="play logo"
+              width={16}
+              height={16}
+              className="ml-1 h-4 w-4"
+            />
+            <p className="ml-2 text-sm text-white">에피소드 10개</p>
+          </div>
         </div>
         <div className="mb-4 flex w-full flex-row">
           <div className="mr-6 flex aspect-[240/320] w-[240px] bg-amber-200" />
