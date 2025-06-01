@@ -5,10 +5,7 @@
     "\\app\\home",
     "\\app\\home\\play",
     "\\app\\home\\play\\[uid]",
-    "\\app\\home\\play\\[uid]\\reservation",
-    "\\app\\home\\play\\[uid]\\watch",
-    "\\app\\home\\play\\[uid]\\watch-end"
+    "\\app\\home\\play\\[uid]\\selectseat"
   ],
-  "SelectedNode": "\\app\\home\\play\\[uid]\\watch-end\\page.tsx",
   "PreviewInSolutionExplorer": false
 }
