@@ -37,11 +37,31 @@ const PlayDetailPage = () => {
         </div>
         <PlayDetailCard />
         <Tabs defaultValue="info" className="flew-row flex w-full">
-          <TabsList className="w-full">
-            <TabsTrigger value="info">정보</TabsTrigger>
-            <TabsTrigger value="last-play">이전회차</TabsTrigger>
-            <TabsTrigger value="behind">비하인드</TabsTrigger>
-            <TabsTrigger value="review">후기</TabsTrigger>
+          <TabsList className="h-[52px] w-full bg-transparent">
+            <TabsTrigger
+              value="info"
+              className="text-md data-[state=active]:bg-transparen rounded-none border-b-[#A38BB1] py-3 text-[#A38BB1] data-[state=active]:border-b-2 data-[state=active]:border-b-[#CEC4E4] data-[state=active]:text-[#CEC4E4]"
+            >
+              정보
+            </TabsTrigger>
+            <TabsTrigger
+              value="last-play"
+              className="text-md data-[state=active]:bg-transparen rounded-none border-b-[#A38BB1] py-3 text-[#A38BB1] data-[state=active]:border-b-2 data-[state=active]:border-b-[#CEC4E4] data-[state=active]:text-[#CEC4E4]"
+            >
+              이전회차
+            </TabsTrigger>
+            <TabsTrigger
+              value="behind"
+              className="text-md data-[state=active]:bg-transparen rounded-none border-b-[#A38BB1] py-3 text-[#A38BB1] data-[state=active]:border-b-2 data-[state=active]:border-b-[#CEC4E4] data-[state=active]:text-[#CEC4E4]"
+            >
+              비하인드
+            </TabsTrigger>
+            <TabsTrigger
+              value="review"
+              className="text-md data-[state=active]:bg-transparen rounded-none border-b-[#A38BB1] py-3 text-[#A38BB1] data-[state=active]:border-b-2 data-[state=active]:border-b-[#CEC4E4] data-[state=active]:text-[#CEC4E4]"
+            >
+              후기
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="info">
             <InfoTabPanel />
