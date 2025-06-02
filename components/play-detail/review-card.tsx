@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export const ReviewCard = ({
   title,
@@ -23,25 +24,25 @@ export const ReviewCard = ({
   }, [rate]);
   return (
     <div className="mb-5 flex w-full flex-col">
-      <div className="mb-1 flex flex-row">
-        <p className="mr-2 text-lg text-black">{title}</p>
-        <p className="mr-2 text-sm text-gray-300">{userName}</p>
-        <p className="text-base text-gray-300">{date}</p>
+      <div className="mb-1 flex flex-row items-center">
+        <p className="mr-1 text-xl text-[#EAE0FF]">{title}</p>
+        <p className="mr-1 text-xs text-[#ADADAD]">{userName}</p>
+        <p className="text-xs text-[#ADADAD]">{date}</p>
       </div>
-      <div className="mb-2 flex w-full flex-row items-start">
-        <p>{rate}</p>
+      <div className="mb-2 flex w-full flex-row items-center">
+        <p className="mr-1 text-xl text-[#A779BC]">{rate}</p>
         {Array.from({ length: starCount }, (_, index) => (
-          <span key={index} className="text-yellow-500">
-            ★
-          </span>
-        ))}
-        {Array.from({ length: 5 - starCount }, (_, index) => (
-          <span key={index} className="text-gray-300">
-            ★
-          </span>
+          <Image
+            src={'/svg/star.svg'}
+            alt="star"
+            width={24}
+            height={24}
+            key={index}
+            className="ml-1 h-5 w-5"
+          />
         ))}
       </div>
-      <p className="text-base text-gray-600">{content}</p>
+      <p className="text-lg text-[#EAE0FF]">{content}</p>
     </div>
   );
 };
