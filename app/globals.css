@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@tailwind base;
+
+/* 비디오 플레이어 제작에 필요한 부분 */
+@tailwind components;
 @tailwind utilities;
 
 @theme inline {
@@ -134,4 +138,13 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* 비디오 플레이어 제작에 필요한 부분 (텍스트에 고정폭 숫자와 그림자 적용은 css에서만 가능함) */
+.text-video-time {
+  font-family: SUITE Variable;
+  text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  font-weight: 700;
 }

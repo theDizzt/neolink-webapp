@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import ClientLayout from './clientLayout'; // watch 페이지는 예외처리함
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,9 +28,7 @@ export default function RootLayout({
       <body
         className={`w-full ${geistSans.variable} ${geistMono.variable} flex flex-row justify-center bg-white antialiased`}
       >
-        <div className="flex h-fit w-full max-w-[800px] overflow-auto border border-gray-200">
-          {children}
-        </div>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
