@@ -10,11 +10,11 @@ export const BaseButton = ({
   return (
     <div
       className={cn(
-        'flex h-10 w-20 items-center justify-center rounded-lg bg-gray-200',
+        'flex shrink-0 cursor-pointer items-center justify-center rounded-lg bg-linear-to-r from-[#504584] to-[#3C184C] px-3 py-2',
         className,
       )}
     >
-      <p className="shrink-0 text-sm text-black">{title}</p>
+      <p className="text-sm text-[#EAE0FF]">{title}</p>
     </div>
   );
 };
