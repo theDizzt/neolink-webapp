@@ -45,6 +45,7 @@ export const ActorInfoCard = ({
                 }}
               />
             </div>
+            ㅣㅈ
             <div className="flex w-full flex-row items-start">
               <div className="relative aspect-[3/4] h-[180px] overflow-clip rounded-md bg-amber-500">
                 <Image
