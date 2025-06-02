@@ -21,14 +21,14 @@
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-stars": "^2.2.5",
     "router": "^2.2.0",
     "tailwind-merge": "^3.3.0",
-    "yarn": "^1.22.22",
-    "react-stars": "^2.2.5"
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4.1.7",
+    "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -36,9 +36,9 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.4",
     "prettier": "^3.5.3",
-    "tailwindcss": "^4.1.7",
+    "tailwindcss": "^4.1.8",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"
   }

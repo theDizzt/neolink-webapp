@@ -13,7 +13,7 @@ export const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="flex h-fit w-full max-w-[800px] overflow-auto border border-gray-200">
+    <div className="no-scrollbar flex h-svh w-full max-w-[800px] overflow-y-auto">
       {children}
     </div>
   );

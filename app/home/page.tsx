@@ -14,23 +14,19 @@ const inter = Inter({
 
 export default function HomePage() {
   return (
-    <main
-      className={`${inter.className} font-light relative h-[1886px] w-[1280px] mx-auto bg-[url('/images/background.png')] bg-cover bg-center min-h-screen select-none`}
-    >
-      {/* 오버레이 */}
-      <div className="absolute inset-0 bg-[#1E1B2E]/70 z-0" />
-
+    <div className={`${inter.className} font-light select-none`}>
       {/* 콘텐츠 */}
-      <div className="relative z-10 w-[800px] mx-auto">
+      <div className="relative z-10 flex w-[800px] flex-col">
         <Header />
         <Banner />
         <PopularList />
         <LimitedList />
-        <div className="border-b border-[#3B2B6C] w-full mt-8 mb-4" />
+        <div className="mt-8 mb-4 w-full border-b border-[#3B2B6C]" />
         <ReviewList />
+        <div className="mb-5 w-full" />
 
         {/* 여기에 기간한정, 후기 같은 컴포넌트도 추가 */}
       </div>
-    </main>
+    </div>
   );
 }
