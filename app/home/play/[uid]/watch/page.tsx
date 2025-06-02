@@ -1,17 +1,37 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2, FastForward, Subtitles, Info, Smile, Vote, Video } from 'lucide-react';
+import {
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize2,
+  Minimize2,
+  FastForward,
+  Subtitles,
+  Info,
+  Smile,
+  Vote,
+  Video,
+} from 'lucide-react';
+import Image from 'next/image';
 import classNames from 'classnames';
 import { useRouter } from 'next/navigation';
+
+interface VotingOption {
+  time: number;
+  question: string;
+  options: string[];
+}
 
 export default function Home() {
   // 페이지 자동 이동을 위한 라우터
   const router = useRouter();
 
   // 비디오 참조 및 영역
-  const videoRef = useRef(null);
-  const containerRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // 비디오 재생 제어
   const [isPlaying, setIsPlaying] = useState(false);
@@ -43,9 +63,10 @@ export default function Home() {
   // 투표 기능 변수
   const [votes, setVotes] = useState({ A: 0, B: 0 });
   const totalVotes = votes.A + votes.B;
-  const percentA = totalVotes === 0 ? 0 : Math.round((votes.A / totalVotes) * 100);
+  const percentA =
+    totalVotes === 0 ? 0 : Math.round((votes.A / totalVotes) * 100);
   const percentB = 100 - percentA;
-  const [currentVote, setCurrentVote] = useState(null);
+  const [currentVote, setCurrentVote] = useState<VotingOption>();
   const [voteIndex, setVoteIndex] = useState(0);
   const [countdown, setCountdown] = useState(15);
   const [showResult, setShowResult] = useState(false);
@@ -54,9 +75,9 @@ export default function Home() {
   const [isLive, setIsLive] = useState(0);
 
   //재생속도 제어
-  const playbackRateMenuRef = useRef(null);
+  const playbackRateMenuRef = useRef<HTMLDivElement>(null);
   const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
-  const controlTimeout = useRef(null);
+  const controlTimeout = useRef<NodeJS.Timeout>(null);
 
   // 자막 옵션
   const subtitleOptions = [
@@ -111,7 +132,7 @@ export default function Home() {
   ];
 
   // 투표 목록
-  const votingData = [
+  const votingData: VotingOption[] = [
     {
       time: 65,
       question: '점순네 닭을 후려칠까?',
@@ -130,20 +151,26 @@ export default function Home() {
   ];
 
   // 재생 시간 반환 ([h]:mm:ss)
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     if (isNaN(seconds)) return '00:00';
     const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-    const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+    const mins = Math.floor((seconds % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const secs = Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, '0');
     return hrs > 0 ? `${hrs}:${mins}:${secs}` : `${mins}:${secs}`;
   };
 
   // 자막 기능
-  const handleSelectSubtitle = (option: typeof subtitleOptions[0] | null) => {
+  const handleSelectSubtitle = (option: (typeof subtitleOptions)[0] | null) => {
     const video = videoRef.current;
     if (!video) return;
 
-    video.querySelectorAll('track').forEach((t) => t.remove());
+    (video as HTMLVideoElement)
+      .querySelectorAll('track')
+      .forEach((t) => t.remove());
     if (option) {
       const track = document.createElement('track');
       track.kind = 'subtitles';
@@ -152,7 +179,7 @@ export default function Home() {
       track.src = option.src;
       track.default = true;
       video.appendChild(track);
-  
+
       const [textTrack] = Array.from(video.textTracks || []);
       if (textTrack) textTrack.mode = 'showing';
     }
@@ -270,25 +297,26 @@ export default function Home() {
   // 라이브 자동 재생 기능
   useEffect(() => {
     const vid = videoRef.current;
-    if (!vid) return
+    if (!vid) return;
 
     if (isLive) {
-      vid.muted = true
-      vid.defaultMuted = true
-      vid.playsInline = true
-      vid.autoplay = true
-      vid.preload = 'auto'
-      vid.play()
+      vid.muted = true;
+      vid.defaultMuted = true;
+      vid.playsInline = true;
+      vid.autoplay = true;
+      vid.preload = 'auto';
+      vid
+        .play()
         .then(() => {
-          vid.muted = false
-          setIsPlaying(true)
-          console.log('▶LIVE autoplay 성공, 소리 ON')
+          vid.muted = false;
+          setIsPlaying(true);
+          console.log('▶LIVE autoplay 성공, 소리 ON');
         })
-        .catch(err => {
-          console.warn('LIVE autoplay 실패:', err)
-        })
+        .catch((err) => {
+          console.warn('LIVE autoplay 실패:', err);
+        });
     }
-  }, [isLive])
+  }, [isLive]);
 
   // 동영상 배속 설정
   useEffect(() => {
@@ -301,7 +329,7 @@ export default function Home() {
 
   // 단축키 설정
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       const video = videoRef.current;
       if (!video) return;
 
@@ -335,11 +363,15 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (playbackRateMenuRef.current && !playbackRateMenuRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        playbackRateMenuRef.current &&
+        !playbackRateMenuRef.current.contains(e.target as Node)
+      ) {
         setPlaybackRateMenuOpen(false);
       }
     };
@@ -377,7 +409,10 @@ export default function Home() {
     if (!video) return;
 
     const checkTime = () => {
-      if (voteIndex < votingData.length && Math.floor(video.currentTime) === votingData[voteIndex].time) {
+      if (
+        voteIndex < votingData.length &&
+        Math.floor(video.currentTime) === votingData[voteIndex].time
+      ) {
         video.pause();
         setCurrentVote(votingData[voteIndex]);
         setShowVote(true);
@@ -389,6 +424,7 @@ export default function Home() {
 
     const interval = setInterval(checkTime, 500);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voteIndex]);
 
   // 투표 결과 띄우기
@@ -408,7 +444,7 @@ export default function Home() {
     }
   }, [countdown, showVote]);
 
-  const handleVote = (option) => {
+  const handleVote = (option: string) => {
     setVotes((prev) => ({
       ...prev,
       [option === 'A' ? 'A' : 'B']: prev[option === 'A' ? 'A' : 'B'] + 1,
@@ -416,9 +452,9 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen bg-black text-purple-200 p-6">
+    <main className="flex min-h-screen flex-col items-center justify-start bg-black p-6 text-purple-200">
       <div
-        className="relative w-full h-[calc(100vh-48px)] max-w-screen aspect-video"
+        className="relative aspect-video h-[calc(100vh-48px)] w-full max-w-screen"
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onDoubleClick={handleDoubleClick}
@@ -429,106 +465,114 @@ export default function Home() {
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
           onEnded={handleEnded}
-          className="w-full h-full object-contain bg-black"
+          className="h-full w-full bg-black object-contain"
         >
           <source src={videoSrc} type="video/mp4" />
         </video>
 
         <div
           className={classNames(
-            'flex justify-between gap-4 w-full absolute top-2 left-2 px-3 py-1 text-xs font-semibold transition-opacity duration-300',
+            'absolute top-2 left-2 flex w-full justify-between gap-4 px-3 py-1 text-xs font-semibold transition-opacity duration-300',
             {
               'opacity-100': showControls,
               'opacity-0': !showControls,
-            }
+            },
           )}
         >
           <div>
             <span className="inline-flex items-center">
-              <Video className={classNames("mr-1 align-middle",
-                {
+              <Video
+                className={classNames('mr-1 align-middle', {
                   'text-red-600': isLive,
-                  'text-gray-600': !isLive
-                }
-                )} size={24} />
-              <span className="align-middle text-white text-lg ml-1">{isLive ? '실시간' : '녹화본'}</span>
+                  'text-gray-600': !isLive,
+                })}
+                size={24}
+              />
+              <span className="ml-1 align-middle text-lg text-white">
+                {isLive ? '실시간' : '녹화본'}
+              </span>
             </span>
           </div>
           <div>
             <button
               onClick={() => setShowProductInfo(true)}
-              className="bg-[#3d3750]/90 text-white rounded-full flex items-center space-x-2 shadow-md hover:bg-[#6c6090] transition"
+              className="flex items-center space-x-2 rounded-full bg-[#3d3750]/90 text-white shadow-md transition hover:bg-[#6c6090]"
             >
-                <span className="inline-block ml-2 text-sm">여기를 눌러서 정보를 확인해 보세요</span>
-                <div
-                  className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
-                >
-                  <Info size={20} />
-                </div>
-
+              <span className="ml-2 inline-block text-sm">
+                여기를 눌러서 정보를 확인해 보세요
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5a5272] transition hover:bg-[#6c6090]">
+                <Info size={20} />
+              </div>
             </button>
           </div>
         </div>
         <div
           className={classNames(
-            'absolute bottom-0 left-0 right-0 px-4 pt-4 pb-2 transition-opacity duration-300 bg-gradient-to-t from-black/80 to-transparent text-white',
+            'absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-4 pb-2 text-white transition-opacity duration-300',
             {
               'opacity-100': showControls,
               'opacity-0': !showControls,
-            }
+            },
           )}
         >
-        {!isLive && (
-          <div className="flex flex-col gap-2 w-full">
-            <div
-              className="relative w-full h-2 rounded-full bg-white/20 cursor-pointer"
-              onMouseDown={(e) => {
-                const bar = e.currentTarget;
-                const rect = bar.getBoundingClientRect();
-
-                const updatePosition = (clientX) => {
-                  const clickX = Math.min(Math.max(clientX - rect.left, 0), rect.width);
-                  const newProgress = (clickX / rect.width) * 100;
-                  const video = videoRef.current;
-                  if (video && video.duration) {
-                    const newTime = (newProgress / 100) * video.duration;
-                    video.currentTime = newTime;
-                    setProgress(newProgress);
-                    setCurrentTime(newTime);
-                  }
-                };
-
-                const handleMouseMove = (moveEvent) => {
-                  updatePosition(moveEvent.clientX);
-                };
-
-                const handleMouseUp = (upEvent) => {
-                  updatePosition(upEvent.clientX);
-                  window.removeEventListener('mousemove', handleMouseMove);
-                  window.removeEventListener('mouseup', handleMouseUp);
-                };
-
-                window.addEventListener('mousemove', handleMouseMove);
-                window.addEventListener('mouseup', handleMouseUp);
-              }}
-            >
+          {!isLive && (
+            <div className="flex w-full flex-col gap-2">
               <div
-                className="absolute top-0 left-0 h-full rounded-full bg-purple-400 hover:bg-purple-500"
-                style={{ width: `${progress}%` }}
-              />
+                className="relative h-2 w-full cursor-pointer rounded-full bg-white/20"
+                onMouseDown={(e) => {
+                  const bar = e.currentTarget;
+                  const rect = bar.getBoundingClientRect();
 
-              <div
-                className="absolute -top-1 w-4 h-4 bg-purple-400 rounded-full shadow-md transform -translate-x-1/2 hover:bg-purple-500"
-                style={{ left: `${progress}%` }}
-              />
+                  const updatePosition = (clientX: number) => {
+                    const clickX = Math.min(
+                      Math.max(clientX - rect.left, 0),
+                      rect.width,
+                    );
+                    const newProgress = (clickX / rect.width) * 100;
+                    const video = videoRef.current;
+                    if (video && video.duration) {
+                      const newTime = (newProgress / 100) * video.duration;
+                      video.currentTime = newTime;
+                      setProgress(newProgress);
+                      setCurrentTime(newTime);
+                    }
+                  };
+
+                  const handleMouseMove = (moveEvent: MouseEvent) => {
+                    updatePosition(moveEvent.clientX);
+                  };
+
+                  const handleMouseUp = (upEvent: MouseEvent) => {
+                    updatePosition(upEvent.clientX);
+                    window.removeEventListener('mousemove', handleMouseMove);
+                    window.removeEventListener('mouseup', handleMouseUp);
+                  };
+
+                  window.addEventListener('mousemove', handleMouseMove);
+                  window.addEventListener('mouseup', handleMouseUp);
+                }}
+              >
+                <div
+                  className="absolute top-0 left-0 h-full rounded-full bg-purple-400 hover:bg-purple-500"
+                  style={{ width: `${progress}%` }}
+                />
+
+                <div
+                  className="absolute -top-1 h-4 w-4 -translate-x-1/2 transform rounded-full bg-purple-400 shadow-md hover:bg-purple-500"
+                  style={{ left: `${progress}%` }}
+                />
+              </div>
+              <div className="h-0.5" />
             </div>
-            <div className="h-0.5" />
-          </div>
-        )}
-          <div className="flex justify-between items-center text-sm">
+          )}
+          <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
               {!isLive && (
-                <button onClick={togglePlay} className="bg-purple-400 hover:bg-purple-500 p-2 rounded-full">
+                <button
+                  onClick={togglePlay}
+                  className="rounded-full bg-purple-400 p-2 hover:bg-purple-500"
+                >
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
                 </button>
               )}
@@ -537,27 +581,42 @@ export default function Home() {
                 onMouseEnter={() => setShowVolumeBar(true)}
                 onMouseLeave={() => setShowVolumeBar(false)}
               >
-                <button onClick={toggleMute}>{volume === 0 || isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}</button>
+                <button onClick={toggleMute}>
+                  {volume === 0 || isMuted ? (
+                    <VolumeX size={18} />
+                  ) : (
+                    <Volume2 size={18} />
+                  )}
+                </button>
                 {showVolumeBar && (
                   <div
-                    className="relative w-24 h-1.5 bg-white/20 rounded-full cursor-pointer"
+                    className="relative h-1.5 w-24 cursor-pointer rounded-full bg-white/20"
                     onMouseDown={(e) => {
                       const bar = e.currentTarget;
                       const rect = bar.getBoundingClientRect();
 
-                      const updateVolume = (clientX) => {
-                        const x = Math.min(Math.max(clientX - rect.left, 0), rect.width);
-                        const newVolume = parseFloat((x / rect.width).toFixed(2));
+                      const updateVolume = (clientX: number) => {
+                        const x = Math.min(
+                          Math.max(clientX - rect.left, 0),
+                          rect.width,
+                        );
+                        const newVolume = parseFloat(
+                          (x / rect.width).toFixed(2),
+                        );
                         setVolume(newVolume);
                         setIsMuted(newVolume === 0);
                         const video = videoRef.current;
                         if (video) video.volume = newVolume;
                       };
 
-                      const handleMouseMove = (moveEvent) => updateVolume(moveEvent.clientX);
-                      const handleMouseUp = (upEvent) => {
+                      const handleMouseMove = (moveEvent: MouseEvent) =>
+                        updateVolume(moveEvent.clientX);
+                      const handleMouseUp = (upEvent: MouseEvent) => {
                         updateVolume(upEvent.clientX);
-                        window.removeEventListener('mousemove', handleMouseMove);
+                        window.removeEventListener(
+                          'mousemove',
+                          handleMouseMove,
+                        );
                         window.removeEventListener('mouseup', handleMouseUp);
                       };
 
@@ -571,12 +630,12 @@ export default function Home() {
                     />
 
                     <div
-                      className="absolute -top-0.75 w-3 h-3 bg-purple-400 rounded-full shadow-md transform -translate-x-1/2 hover:bg-purple-500"
+                      className="absolute -top-0.75 h-3 w-3 -translate-x-1/2 transform rounded-full bg-purple-400 shadow-md hover:bg-purple-500"
                       style={{ left: `${volume * 100}%` }}
                     />
 
                     <div
-                      className="absolute -top-5 left-1/2 -translate-x-1/2 text-white text-xs px-1 py-1 rounded-full"
+                      className="absolute -top-5 left-1/2 -translate-x-1/2 rounded-full px-1 py-1 text-xs text-white"
                       style={{ left: `${volume * 100}%` }}
                     >
                       {Math.round(volume * 100)}
@@ -584,13 +643,15 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <span className="text-xs cursor-pointer text-video-time" onClick={toggleTimeDisplay}>
+              <span
+                className="text-video-time cursor-pointer text-xs"
+                onClick={toggleTimeDisplay}
+              >
                 {isLive
                   ? `${formatTime(currentTime)}`
                   : showRemaining
                     ? `-${formatTime(duration - currentTime)} / ${formatTime(duration)}`
-                    : `${formatTime(currentTime)} / ${formatTime(duration)}`
-                }
+                    : `${formatTime(currentTime)} / ${formatTime(duration)}`}
               </span>
             </div>
             <div className="flex items-center gap-4">
@@ -598,13 +659,13 @@ export default function Home() {
                 <div className="relative" ref={playbackRateMenuRef}>
                   <button
                     onClick={() => setPlaybackRateMenuOpen((prev) => !prev)}
-                    className="flex items-center gap-1 text-white px-2 py-1 rounded hover:text-purple-400"
+                    className="flex items-center gap-1 rounded px-2 py-1 text-white hover:text-purple-400"
                   >
                     <FastForward size={18} />
                     {playbackRate}x
                   </button>
                   {playbackRateMenuOpen && (
-                    <div className="absolute bottom-full mb-1 left-0 bg-black/45 text-white rounded shadow-md z-10">
+                    <div className="absolute bottom-full left-0 z-10 mb-1 rounded bg-black/45 text-white shadow-md">
                       {playbackRates.map((rate) => (
                         <button
                           key={rate}
@@ -612,8 +673,10 @@ export default function Home() {
                             setPlaybackRate(rate);
                             setPlaybackRateMenuOpen(false);
                           }}
-                          className={`block w-full text-left px-3 py-1 hover:bg-purple-800/45 rounded shadow-md z-10 ${
-                            playbackRate === rate ? 'bg-purple-700/45 font-bold rounded shadow-md z-10' : ''
+                          className={`z-10 block w-full rounded px-3 py-1 text-left shadow-md hover:bg-purple-800/45 ${
+                            playbackRate === rate
+                              ? 'z-10 rounded bg-purple-700/45 font-bold shadow-md'
+                              : ''
                           }`}
                         >
                           {rate}x
@@ -622,60 +685,67 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                )}
+              )}
               <button
                 onClick={() => setShowReaction(!showReaction)}
-                className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5a5272] transition hover:bg-[#6c6090]"
               >
-                <Smile size={20}/>
+                <Smile size={20} />
               </button>
               <button
                 onClick={() => setShowVote(!showVote)}
-                className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5a5272] transition hover:bg-[#6c6090]"
               >
-                <Vote size={20}/>
+                <Vote size={20} />
               </button>
               <button
                 onClick={() => setShowSubtitleMenu((p) => !p)}
-                className="w-8 h-8 bg-[#5a5272] hover:bg-[#6c6090] transition rounded-full flex items-center justify-center"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5a5272] transition hover:bg-[#6c6090]"
               >
-                <Subtitles size={20}/>
+                <Subtitles size={20} />
               </button>
-              <button onClick={handleFullscreenToggle} className="p-2 rounded-full hover:text-purple-400">
-                {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+              <button
+                onClick={handleFullscreenToggle}
+                className="rounded-full p-2 hover:text-purple-400"
+              >
+                {isFullscreen ? (
+                  <Minimize2 size={20} />
+                ) : (
+                  <Maximize2 size={20} />
+                )}
               </button>
             </div>
           </div>
         </div>
 
         {showVote && currentVote && (
-          <div className="absolute bottom-20 w-full px-4 flex flex-col items-center space-y-4">
+          <div className="absolute bottom-20 flex w-full flex-col items-center space-y-4 px-4">
             <div className="flex space-x-4">
               {currentVote.options.map((option, i) => (
                 <button
                   key={i}
                   onClick={() => handleVote(i === 0 ? 'A' : 'B')}
-                  className="w-55 px-6 py-2 bg-purple-600 rounded text-white font-semibold hover:bg-purple-700"
+                  className="w-55 rounded bg-purple-600 px-6 py-2 font-semibold text-white hover:bg-purple-700"
                 >
                   {option}
                 </button>
               ))}
             </div>
 
-            <div className="bg-[#d6c9f0] w-120 py-4 rounded-xl shadow-md text-center text-black text-lg font-semibold max-w-md w-full">
+            <div className="w-full max-w-md rounded-xl bg-[#d6c9f0] py-4 text-center text-lg font-semibold text-black shadow-md">
               {currentVote.question}
               <p className="text-sm">{countdown}초 남음</p>
             </div>
 
-            <div className="absolute bottom-4 right-4 text-xs text-white bg-black/60 w-56 px-3 py-2 rounded-lg shadow-lg space-y-1">
-              <p className="text-center font-semibold text-lg">투표 결과</p>
+            <div className="absolute right-4 bottom-4 w-56 space-y-1 rounded-lg bg-black/60 px-3 py-2 text-xs text-white shadow-lg">
+              <p className="text-center text-lg font-semibold">투표 결과</p>
               <p>현재 {totalVotes} 명이 투표에 참여함!</p>
 
-              <div className="flex justify-between text-lg font-bold mb-1">
+              <div className="mb-1 flex justify-between text-lg font-bold">
                 <span className="text-red-400">{percentA}%</span>
                 <span className="text-sky-500">{percentB}%</span>
               </div>
-              <div className="w-full h-6 bg-gray-200 rounded overflow-hidden flex border border-white">
+              <div className="flex h-6 w-full overflow-hidden rounded border border-white bg-gray-200">
                 <div
                   className="bg-red-400 transition-all duration-500"
                   style={{ width: `${percentA}%` }}
@@ -685,12 +755,12 @@ export default function Home() {
                   style={{ width: `${percentB}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs font-bold mb-1">
+              <div className="mb-1 flex justify-between text-xs font-bold">
                 <span className="text-red-400">
                   <p>{currentVote.options[0]}</p>
                   <p>{votes.A}표</p>
                 </span>
-                <span className="text-sky-500 text-right">
+                <span className="text-right text-sky-500">
                   <p>{currentVote.options[1]}</p>
                   <p>{votes.B}표</p>
                 </span>
@@ -700,34 +770,34 @@ export default function Home() {
         )}
 
         {showReaction && (
-          <div className="absolute bottom-40 w-full px-4 flex justify-center">
-            <div className="bg-white/80 p-4 rounded-xl shadow-md max-w-md w-full text-center text-black">
+          <div className="absolute bottom-40 flex w-full justify-center px-4">
+            <div className="w-full max-w-md rounded-xl bg-white/80 p-4 text-center text-black shadow-md">
               <p className="mb-2 font-semibold">반응 리모컨</p>
               <div className="flex justify-around text-3xl">
-                <button className="hover:scale-124 transition">👏</button>
-                <button className="hover:scale-124 transition">🎉</button>
-                <button className="hover:scale-124 transition">😂</button>
-                <button className="hover:scale-124 transition">😢</button>
-                <button className="hover:scale-124 transition">👍</button>
+                <button className="transition hover:scale-124">👏</button>
+                <button className="transition hover:scale-124">🎉</button>
+                <button className="transition hover:scale-124">😂</button>
+                <button className="transition hover:scale-124">😢</button>
+                <button className="transition hover:scale-124">👍</button>
               </div>
             </div>
           </div>
         )}
 
         {showSubtitleMenu && (
-          <div className="absolute bottom-10 right-16 bg-black/80 text-white rounded shadow-md z-10">
+          <div className="absolute right-16 bottom-10 z-10 rounded bg-black/80 text-white shadow-md">
             {subtitleOptions.map((opt) => (
               <button
                 key={opt.srclang}
                 onClick={() => handleSelectSubtitle(opt)}
-                className="block px-4 py-2 hover:bg-purple-600 w-full text-left"
+                className="block w-full px-4 py-2 text-left hover:bg-purple-600"
               >
                 {opt.label}
               </button>
             ))}
             <button
               onClick={() => handleSelectSubtitle(null)}
-              className="block px-4 py-2 hover:bg-purple-600 w-full text-left"
+              className="block w-full px-4 py-2 text-left hover:bg-purple-600"
             >
               OFF
             </button>
@@ -735,35 +805,37 @@ export default function Home() {
         )}
 
         {showProductInfo && (
-          <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center">
+          <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50">
             {/* 모달 영역 */}
             <div
               style={{
                 backgroundColor: 'rgba(46, 30, 78, 0.76)',
                 borderRadius: '1rem',
               }}
-              className="h-[60vh] w-[70vw] text-white shadow-xl z-50 flex flex-col p-6 relative overflow-hidden"
+              className="relative z-50 flex h-[60vh] w-[70vw] flex-col overflow-hidden p-6 text-white shadow-xl"
             >
               {/* 닫기 버튼 */}
               <button
                 onClick={() => setShowProductInfo(false)}
-                className="absolute top-3 right-4 text-white hover:text-gray-300 text-2xl z-10"
+                className="absolute top-3 right-4 z-10 text-2xl text-white hover:text-gray-300"
               >
                 ✕
               </button>
 
               {/* 스크롤 가능한 리스트 (모달 내부에 스크롤) */}
-              <div className="space-y-4 overflow-y-auto pr-2 mt-8 flex-1">
+              <div className="mt-8 flex-1 space-y-4 overflow-y-auto pr-2">
                 {sampleProducts.map((prod) => (
                   <div
                     key={prod.id}
-                    className="flex items-center justify-between gap-4 bg-white/5 rounded-xl px-4 py-3"
+                    className="flex items-center justify-between gap-4 rounded-xl bg-white/5 px-4 py-3"
                   >
                     <div className="flex items-start gap-4">
-                      <img
+                      <Image
                         src={prod.image}
                         alt={prod.title}
-                        className="w-24 h-24 object-cover rounded"
+                        width={96}
+                        height={96}
+                        style={{ objectFit: 'cover' }}
                       />
                       <div className="text-lg">
                         <p className="font-semibold text-white">{prod.title}</p>
@@ -772,7 +844,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <button className="text-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white px-3 py-1 rounded-full whitespace-nowrap">
+                    <button className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-lg whitespace-nowrap text-white hover:bg-white/20">
                       옷 정보 보러가기 <span className="ml-1">▶</span>
                     </button>
                   </div>
@@ -781,7 +853,6 @@ export default function Home() {
             </div>
           </div>
         )}
-
       </div>
     </main>
   );
