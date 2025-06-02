@@ -13,6 +13,38 @@ const inter = Inter({
 
 const data = [
   {
+    title: '오펀스',
+    rating: 4.6,
+    image: '/images/opensmith.png',
+    modalImage: '/images/opensmith_modal.jpg',
+    description:
+      '필라델피아 북부에 위치한 집에 살고 있는 고아 형제 트릿과 필립. 2주 후, 해롤드와 두 형제의 이상한 동거는 시작되고,  세 사람은 이전에 겪어보지 못한 알 수 없는 감정에 빠져들며 점차 가족이 되어 가는데...',
+  },
+    {
+    title: '내일은 내일에게',
+    rating: 5.0,
+    image: '/images/tomorrow.png',
+    modalImage: '/images/tomorrow_modal.png',
+    description:
+      "높고 화려한 빌딩들이 반짝이는 도시, 별빛마을. 허름한 주택가가 조용히 밤을 맞이하는 곳, 달빛마을. 어느날, 달동네에 난데없이 '이상'이라는 카페가 오픈한다.",
+  },
+  {
+    title: '파우스트',
+    rating: 4.0,
+    image: '/images/faust.png',
+    modalImage: '/images/faust_modal.png',
+    description:
+      '악마 메피스토는 평생을 학자로 살아온 파우스트를 두고 신과 내기를 한다. 파우스트는 인생의 즐거움을 알려주는 대가로 자신의 영혼을 요구하는 메피스토의 거래 제안을 수락하게 된다.',
+  },
+  {
+    title: '클로저',
+    rating: 4.3,
+    image: '/images/closer.png',
+    modalImage: '/images/closer_modal.jpg',
+    description:
+      '다시 올 수 없을 것 같았던 순간의 느낌이 댄은 물론, 안나와 앨리스 모두를 혼란에 빠지게 하는데. 첫눈에 반한 운명 같은 사랑... 과연 그것은 진정한 사랑일까? 아니면, 순간의 유혹일까?',
+  },
+  {
     title: '웃는남자',
     rating: 4.5,
     image: '/images/laughingman.png',
@@ -45,43 +77,11 @@ const data = [
       '극 중 한 여인은 죽음보다 더 악몽 같았던 인생을 살면서 죽음에 안달한다. 그러나 그 여인의 곁에 영(靈)이라는 존재가 모습을 드러내 여인의 죽음을 방해하고 그의 삶에 개입하기 시작한다.',
   },
   {
-    title: '오펀스',
-    rating: 4.6,
-    image: '/images/opensmith.png',
-    modalImage: '/images/opensmith_modal.jpg',
-    description:
-      '필라델피아 북부에 위치한 집에 살고 있는 고아 형제 트릿과 필립. 2주 후, 해롤드와 두 형제의 이상한 동거는 시작되고,  세 사람은 이전에 겪어보지 못한 알 수 없는 감정에 빠져들며 점차 가족이 되어 가는데...',
-  },
-  {
     title: '동백꽃',
     rating: 4.8,
     image: '/images/dongbaek.png',
     modalImage: '/images/dongbaek_modal.png',
     description: '농촌을 배경으로 마름의 딸과 소작인 아들의 풋풋한 애정을 해학적으로 그려 낸 작품.',
-  },
-  {
-    title: '내일은 내일에게',
-    rating: 5.0,
-    image: '/images/tomorrow.png',
-    modalImage: '/images/tomorrow_modal.png',
-    description:
-      "높고 화려한 빌딩들이 반짝이는 도시, 별빛마을. 허름한 주택가가 조용히 밤을 맞이하는 곳, 달빛마을. 어느날, 달동네에 난데없이 '이상'이라는 카페가 오픈한다.",
-  },
-  {
-    title: '파우스트',
-    rating: 4.0,
-    image: '/images/faust.png',
-    modalImage: '/images/faust_modal.png',
-    description:
-      '악마 메피스토는 평생을 학자로 살아온 파우스트를 두고 신과 내기를 한다. 파우스트는 인생의 즐거움을 알려주는 대가로 자신의 영혼을 요구하는 메피스토의 거래 제안을 수락하게 된다.',
-  },
-  {
-    title: '클로저',
-    rating: 4.3,
-    image: '/images/closer.png',
-    modalImage: '/images/closer_modal.jpg',
-    description:
-      '다시 올 수 없을 것 같았던 순간의 느낌이 댄은 물론, 안나와 앨리스 모두를 혼란에 빠지게 하는데. 첫눈에 반한 운명 같은 사랑... 과연 그것은 진정한 사랑일까? 아니면, 순간의 유혹일까?',
   },
 ];
 
@@ -110,8 +110,8 @@ export default function CategoryPage() {
         <div className="flex items-center justify-between mb-6">
           {/* 타이틀 */}
           <h2 className="text-[24px] text-[#EAE0FF] flex items-center mt-10 ml-6">
-            <img src="/images/crown.png" alt="crown" className="mr-2" />
-            대학로 인기 작품
+            <img src="/images/hourglass.png" alt="hourglass" className="mr-2" />
+            기간 한정 작품
           </h2>
 
           {/* 추천순 + 로그인 */}

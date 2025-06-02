@@ -8,11 +8,11 @@ const poppins = Poppins({
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center px-6 py-4">
-      <div className="w-[461px] flex items-center gap-16">
+    <header className="flex items-center justify-between px-6 py-4">
+      <div className="flex w-[461px] items-center gap-16">
         {/* NEOLINK만 Poppins */}
         <h1
-          className={`${poppins.className} text-[36px] font-semibold bg-gradient-to-l from-[#835E92] to-[#4F398E] bg-clip-text text-transparent`}
+          className={`${poppins.className} bg-gradient-to-l from-[#835E92] to-[#4F398E] bg-clip-text text-[36px] font-semibold text-transparent`}
         >
           NEOLINK
         </h1>
@@ -29,7 +29,7 @@ export default function Header() {
         </a>
       </div>
 
-      <button className="text-sm text-[#A38BB1] hover:text-[#E0E3FF] transition">
+      <button className="text-sm text-[#A38BB1] transition hover:text-[#E0E3FF]">
         로그인
       </button>
     </header>

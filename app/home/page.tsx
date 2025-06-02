@@ -15,7 +15,7 @@ const inter = Inter({
 export default function HomePage() {
   return (
     <main
-      className={`${inter.className} font-light relative h-[1886px] w-[1280px] mx-auto bg-[url('/images/background.png')] bg-cover bg-center min-h-screen`}
+      className={`${inter.className} font-light relative h-[1886px] w-[1280px] mx-auto bg-[url('/images/background.png')] bg-cover bg-center min-h-screen select-none`}
     >
       {/* 오버레이 */}
       <div className="absolute inset-0 bg-[#1E1B2E]/70 z-0" />
