@@ -1,10 +1,14 @@
+'use client';
 import { cn } from '@/lib/utils';
-import { MapPin } from 'lucide-react';
 import { BaseButton } from '../button/base-button';
 import { PlayAddress } from './play-address';
 import { PlayThumbnailCard } from '../home/play-thumbnail-card';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const PlayDetailCard = ({ className }: { className?: string }) => {
+  const router = useRouter();
+  const pathName = usePathname();
+
   return (
     <div className={cn('flex w-full flex-col', className)}>
       <div className="mb-4 flex w-full flex-row">
@@ -35,7 +39,13 @@ export const PlayDetailCard = ({ className }: { className?: string }) => {
           </p>
         </div>
       </div>
-      <BaseButton title={'▶ 라이브 중! 보러가기'} className={'mb-6 w-full'} />
+      <BaseButton
+        title={'▶ 라이브 중! 보러가기'}
+        className={'mb-6 w-full'}
+        onClick={() => {
+          router.push(pathName + '/select-seat');
+        }}
+      />
     </div>
   );
 };

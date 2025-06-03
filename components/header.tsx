@@ -1,5 +1,7 @@
+'use client';
 import { ChevronLeft } from 'lucide-react';
 import { Poppins } from 'next/font/google';
+import { useRouter } from 'next/navigation';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -12,6 +14,8 @@ export const Header = ({
 }: {
   hasBackButton?: boolean;
 }) => {
+  const router = useRouter();
+
   return (
     <header className="flex items-center justify-between px-4 py-5">
       {!hasBackButton && (
@@ -35,7 +39,14 @@ export const Header = ({
           </a>
         </div>
       )}
-      {hasBackButton && <ChevronLeft className="h-6 w-6 stroke-[#B29FE9]" />}
+      {hasBackButton && (
+        <ChevronLeft
+          className="h-6 w-6 cursor-pointer stroke-[#B29FE9]"
+          onClick={() => {
+            router.back();
+          }}
+        />
+      )}
 
       <button className="text-sm text-[#A38BB1] transition hover:text-[#E0E3FF]">
         로그인

@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function Modal({
   show,
@@ -18,6 +19,7 @@ export default function Modal({
   modalImage?: string;
 }) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -39,7 +41,7 @@ export default function Modal({
       className="fixed inset-0 z-50 flex items-center justify-center"
     >
       <div
-        className="relative w-[800px] h-[419px] rounded-xl overflow-hidden"
+        className="relative h-[419px] w-[800px] overflow-hidden rounded-xl"
         style={{
           boxShadow: '0 0 10px 5px rgba(163, 139, 177, 0.25)',
         }}
@@ -48,22 +50,27 @@ export default function Modal({
         <img
           src={displayImage}
           alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
         />
 
         {/* 설명 박스 */}
         <div
-          className="absolute left-[20px] bottom-[22px] w-[200px] h-[138px] rounded-[12px] px-3 py-2 text-white text-sm leading-[1.4]"
+          className="absolute bottom-[22px] left-[20px] h-[138px] w-[200px] rounded-[12px] px-3 py-2 text-sm leading-[1.4] text-white"
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
         >
-          <h2 className="text-[15px] font-medium mt-1">{title}</h2>
-          <p className="text-[11.5px] whitespace-pre-wrap leading-tight mt-2">{description}</p>
+          <h2 className="mt-1 text-[15px] font-medium">{title}</h2>
+          <p className="mt-2 text-[11.5px] leading-tight whitespace-pre-wrap">
+            {description}
+          </p>
         </div>
 
         {/* 보러가기 버튼 */}
         <button
-          className="absolute bottom-[22px] right-[12px] flex items-center gap-[4px] px-[12px] py-[8px] text-white text-sm rounded-full"
+          className="absolute right-[12px] bottom-[22px] flex cursor-pointer items-center gap-[4px] rounded-full px-[12px] py-[8px] text-sm text-white"
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+          onClick={() => {
+            router.push('/home/play/dongbaek');
+          }}
         >
           보러가기 <ChevronRight size={16} />
         </button>

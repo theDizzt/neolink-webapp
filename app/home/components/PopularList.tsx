@@ -14,12 +14,12 @@ const data = [
       '기형적인 미소를 가진 그윈플렌은 유랑극단에서 눈먼 데아, 약장수 우르수스와 함께 살아간다. 광대로 유명해진 그는 귀족 조시아나의 유혹과 출생의 비밀로 인해 평온했던 삶이 흔들리게 된다.',
   },
   {
-    title: '연애하기 좋은 날',
-    rating: 5.0,
-    image: '/images/dating.png',
-    modalImage: '/images/dating_modal.png',
+    title: '동백꽃',
+    rating: 4.8,
+    image: '/images/dongbaek.png',
+    modalImage: '/images/dongbaek_modal.png',
     description:
-      '지후는 시연의 마음을 돌리기 위해 과거 연인시절의 이야기를 조작하기 시작한다. 서로에 대한 마음이 호감으로 변하는 와중 잊혀졌던 이별의 기억이 조금씩 돌아오는데!!!',
+      '농촌을 배경으로 마름의 딸과 소작인 아들의 풋풋한 애정을 해학적으로 그려 낸 작품.',
   },
   {
     title: '용팔이',

@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import classNames from 'classnames';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface VotingOption {
   time: number;
@@ -28,6 +28,7 @@ interface VotingOption {
 export default function Home() {
   // 페이지 자동 이동을 위한 라우터
   const router = useRouter();
+  const searchParmas = useSearchParams();
 
   // 비디오 참조 및 영역
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -72,7 +73,7 @@ export default function Home() {
   const [showResult, setShowResult] = useState(false);
 
   // 라이브 여부
-  const [isLive, setIsLive] = useState(0);
+  const [isLive, setIsLive] = useState(searchParmas.get('live') === 'true');
 
   //재생속도 제어
   const playbackRateMenuRef = useRef<HTMLDivElement>(null);

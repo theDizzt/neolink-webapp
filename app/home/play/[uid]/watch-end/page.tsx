@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactStars from 'react-stars';
 
 const Feedback = () => {
@@ -23,9 +23,18 @@ const Feedback = () => {
     setRecommendation(value);
   };
 
+  useEffect(() => {
+    if (submitted) {
+      const timer = setTimeout(() => {
+        window.location.href = '/home/play/dongbaek';
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitted]);
+
   if (submitted) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#0d0d2b] to-[#1b103f] px-4 py-10 text-white">
+      <div className="flex w-full flex-col items-center justify-center bg-gradient-to-b from-[#0d0d2b] to-[#1b103f] px-4 py-10 text-white">
         <h1 className="mb-4 text-xl font-bold text-[#EAE0FF]">감사합니다!</h1>
         <hr className="mt-2 w-full max-w-md border-t border-[#EAE0FF]" />
       </div>
@@ -33,7 +42,7 @@ const Feedback = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#0d0d2b] to-[#1b103f] px-4 py-10 text-white">
+    <div className="flex w-full flex-col items-center justify-center bg-gradient-to-b from-[#0d0d2b] to-[#1b103f] px-4 py-10 text-white">
       <h1 className="mb-6 text-2xl font-bold text-[#EAE0FF]">
         즐겁게 관람하셨나요?
       </h1>

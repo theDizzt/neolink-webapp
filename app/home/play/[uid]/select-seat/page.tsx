@@ -1,17 +1,26 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, PanInfo, useAnimation } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { Header } from '@/components/header';
+import { PlayThumbnailCard } from '@/components/home/play-thumbnail-card';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function SeatBookingPage() {
-  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string>('May 26 15:00');
-  const controls = useAnimation();
-  const constraintsRef = useRef(null);
   const router = useRouter();
+  const pathName = usePathname();
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    dragFree: false,
+    containScroll: 'trimSnaps',
+  });
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   // 날짜/시간 옵션
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dateOptions = [
     { month: 'May', day: '26', time: '13:00' },
     { month: 'May', day: '26', time: '15:00' },
@@ -33,20 +42,6 @@ export default function SeatBookingPage() {
     { row: 5, cols: 7 },
   ];
 
-  // 드래그 이벤트 핸들러
-  const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo,
-  ) => {
-    if (info.offset.x < -100) {
-      controls.start({ x: '-=200' });
-    } else if (info.offset.x > 100) {
-      controls.start({ x: '+=200' });
-    } else {
-      controls.start({ x: 0 });
-    }
-  };
-
   // 좌석 선택 처리
   const handleSeatClick = (seatId: number) => {
     if (reservedSeatIds.includes(seatId)) return;
@@ -67,74 +62,88 @@ export default function SeatBookingPage() {
     setSelectedSeats([]);
   };
 
-  // 뒤로 가기 처리
-  const handleBackClick = () => {
-    router.back();
-  };
-
   // 좌석 ID 생성
   let seatCounter = 0;
   const getSeatId = () => ++seatCounter;
 
+  useEffect(() => {
+    if (!selectedDate || !emblaApi) return;
+    const idx = dateOptions.findIndex(
+      (d) => `${d.month} ${d.day} ${d.time}` === selectedDate,
+    );
+    if (idx !== -1) {
+      emblaApi.scrollTo(idx);
+    }
+  }, [selectedDate, dateOptions, emblaApi]);
+
   return (
-    <div className="min-h-screen bg-[#181228]">
+    <div className="flex h-full w-full flex-col bg-[#181228]">
       {/* 상단 고정 바 */}
-      <div className="fixed top-0 right-0 left-0 z-50 bg-[#181228] py-4">
-        <div className="container mx-auto flex justify-between px-4">
-          <button
-            onClick={handleBackClick}
-            className="rounded-lg px-4 py-2 text-[#907FC4] transition-colors hover:bg-[#271743]"
-          >
-            ←
-          </button>
-          <button className="rounded-lg px-4 py-2 text-[#907FC4] transition-colors hover:bg-[#271743]">
-            로그인
-          </button>
-        </div>
-      </div>
+      <Header hasBackButton={true} />
 
       {/* 메인 컨텐츠 영역 */}
-      <div className="pt-20">
+      <div className="flex w-full flex-col overflow-y-auto pt-5">
         {/* 공연 포스터 이미지 영역 */}
         <div className="mb-8 flex h-48 w-full items-center justify-center">
-          <div className="text-2xl font-bold text-[#907FC4]">
-            공연 포스터 이미지
-          </div>
+          <PlayThumbnailCard
+            title={'동백꽃'}
+            rating={5}
+            image={'/images/dongbeak.png'}
+            className="mr-4"
+          />
         </div>
 
         {/* 나머지 컨텐츠 */}
-        <div className="mx-auto max-w-4xl px-4 pb-8">
+        <div className="w-full px-4 pb-8">
           {/* 드래그 가능한 날짜 선택 영역*/}
-          <div className="mb-6 flex justify-center">
-            <div className="overflow-hidden" ref={constraintsRef}>
-              <motion.div
-                className="flex cursor-grab active:cursor-grabbing"
-                drag="x"
-                dragConstraints={constraintsRef}
-                onDragEnd={handleDragEnd}
-                animate={controls}
-                whileTap={{ cursor: 'grabbing' }}
-              >
-                {dateOptions.map((date, index) => (
-                  <div
-                    key={index}
-                    className={`mx-2 flex-shrink-0 rounded-[40px] px-[80px] py-[10px] text-center transition-all ${
-                      selectedDate === `${date.month} ${date.day} ${date.time}`
-                        ? 'border-white-300 scale-90 border-1 bg-gradient-to-tl from-[#3D366E] to-[#271743] text-white shadow-lg'
-                        : 'scale-100 bg-gradient-to-tl from-[#707070] to-[#D6D6D6] text-gray-300 hover:from-[#907FC4] hover:to-[#271743]'
-                    }`}
-                    onClick={() => handleDateSelect(date)}
-                  >
-                    <div className="text-sm text-[30px] font-bold">
-                      {date.month}
+          {/* 날짜 선택 영역 - Embla Carousel 사용 */}
+          <div className="mb-6 flex w-full justify-center">
+            <div className="w-full max-w-2xl">
+              <div className="embla" ref={emblaRef} tabIndex={0}>
+                <div className="embla__container">
+                  {dateOptions.map((date, index) => (
+                    <div className="embla__slide" key={index}>
+                      <div
+                        tabIndex={0}
+                        aria-selected={
+                          selectedDate ===
+                          `${date.month} ${date.day} ${date.time}`
+                        }
+                        className={`mx-2 flex-shrink-0 cursor-pointer rounded-[40px] px-[80px] py-[10px] text-center transition-all outline-none focus:ring-2 focus:ring-[#907FC4]${
+                          selectedDate ===
+                          `${date.month} ${date.day} ${date.time}`
+                            ? 'border-white-300 scale-90 border-1 bg-gradient-to-tl from-[#3D366E] to-[#271743] text-white shadow-lg'
+                            : 'scale-100 bg-gradient-to-tl from-[#707070] to-[#D6D6D6] text-gray-300 hover:from-[#907FC4] hover:to-[#271743]'
+                        }`}
+                        onClick={() => {
+                          handleDateSelect(date);
+                          if (emblaApi) {
+                            emblaApi.scrollTo(index);
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            handleDateSelect(date);
+                            if (emblaApi) {
+                              emblaApi.scrollTo(index);
+                            }
+                          }
+                        }}
+                      >
+                        <div className="text-sm text-[30px] font-bold">
+                          {date.month}
+                        </div>
+                        <div className="text-[30px] font-bold">{date.day}</div>
+                        <div className="text-xs text-[20px] font-bold">
+                          {date.time}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-[30px] font-bold">{date.day}</div>
-                    <div className="text-xs text-[20px] font-bold">
-                      {date.time}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
+                  ))}
+                </div>
+              </div>
+              {/* --- */}
+              {/* END Embla Carousel */}
             </div>
           </div>
 
@@ -225,12 +234,17 @@ export default function SeatBookingPage() {
             <button
               className={`rounded-[500px] bg-gradient-to-r from-[#3D366E] to-[#271743] px-12 py-4 text-lg font-bold text-[#CEC4E4] transition-all hover:opacity-80 ${
                 selectedSeats.length === 0
-                  ? 'cursor-not-allowed opacity-50'
-                  : 'shadow-lg'
+                  ? 'opacity-50'
+                  : 'cursor-pointer shadow-lg'
               }`}
               disabled={selectedSeats.length === 0}
+              onClick={() => {
+                if (selectedSeats.length > 0) {
+                  router.push('/home/play/dongbaek/watch?live=true');
+                }
+              }}
             >
-              Buy Ticket - ${selectedSeats.length * 5}
+              입장 - ${selectedSeats.length * 5}
             </button>
           </div>
         </div>
